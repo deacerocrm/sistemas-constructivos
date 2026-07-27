@@ -39,14 +39,16 @@
   color: #002d6f !important;
 }
 
-#deacero-lead-form input[type="text"],
-#deacero-lead-form input[type="email"],
-#deacero-lead-form input[type="tel"],
-#deacero-lead-form select,
-#deacero-lead-form textarea {
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="text"],
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="email"],
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="tel"],
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form select,
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form textarea {
   width: 100% !important;
   box-sizing: border-box !important;
-  border: 1px solid #a8afb9 !important;
+  border-width: 1.5px !important;
+  border-style: solid !important;
+  border-color: #8b93a0 !important;
   border-radius: 12px !important;
   padding: 13px 16px !important;
   font-size: 15px !important;
@@ -59,9 +61,11 @@
   min-height: 100px;
 }
 
-#deacero-lead-form input:focus,
-#deacero-lead-form select:focus,
-#deacero-lead-form textarea:focus {
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="text"]:focus,
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="email"]:focus,
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="tel"]:focus,
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form select:focus,
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form textarea:focus {
   outline: none !important;
   border-color: #002d6f !important;
   box-shadow: 0 0 0 3px rgba(0, 45, 111, 0.18) !important;
