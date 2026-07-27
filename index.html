@@ -685,15 +685,18 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
 	<span id="hs_cos_wrapper_widget_1690225387286_" class="hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_form" style="" data-hs-cos-general-type="widget" data-hs-cos-type="form"><h3 id="hs_cos_wrapper_widget_1690225387286_title" class="hs_cos_wrapper form-title" data-hs-cos-general-type="widget_field" data-hs-cos-type="text">Compártenos tus datos y nos pondremos en contacto:</h3>
 
 <form action="https://webto.salesforce.com/servlet/servlet.WebToLead" method="POST" class="hs-form stacked hs-custom-form" id="deacero-lead-form">
-  <!-- Org Id: REPLACE with your Salesforce org's real Web-to-Lead Organization Id (Setup > Web-to-Lead) -->
+  <!-- Org Id: REPLACE with your Salesforce org's real Web-to-Lead Organization Id (Setup > Web-to-Lead). Currently unset — get it from vscodeOrg/UAT/PROD as appropriate before going live. -->
   <input type="hidden" name="oid" value="00Dxxxxxxxxxxxxxxx">
   <input type="hidden" name="retURL" value="https://landing.deacero.com/sistemas-constructivos-gracias">
   <!-- Lead.Company is required by Salesforce and not asked on this form; using a placeholder. Consider adding a real "Empresa" field instead. -->
   <input type="hidden" name="company" value="Sin especificar">
-  <!-- Pins this lead to the Sistemas Constructivos business line. REPLACE 00N... with the real Web-to-Lead field id for PI2_Tipo_de_formulario__c (get it from Setup > Web-to-Lead > Edit > add PI2_Tipo_de_formulario__c to the field list, then copy the generated 00N id) -->
-  <input type="hidden" name="00N_TIPO_FORMULARIO" value="Sistemas Constructivos">
-  <!-- REPLACE 00N... with the real Web-to-Lead field id for PI2_Country__c. NOTE: this is a lookup field (references custom object CSPicklistData__c) — Web-to-Lead's plain POST may not reliably populate lookup fields. If this silently fails to save on the Lead, that's why; the fallback is a small backend that does an authenticated API insert instead. -->
-  <input type="hidden" name="00N_COUNTRY" value="a2F5a0000030nCPEAY">
+  <!-- Native Web-to-Lead reserved fields (no 00N id, no custom field needed): links the Lead to a Campaign and creates its CampaignMember. Both are required together — Campaign_ID alone does NOT create the association. Currently pointed at "Sistemas Constructivos - Landing Generica" in vscodeOrg (701cb000012Q8oRAAS); replace per environment/campaign variant. -->
+  <input type="hidden" name="Campaign_ID" value="701cb000012Q8oRAAS">
+  <input type="hidden" name="member_status" value="Responded">
+  <!-- Real Web-to-Lead field id for PI2_Tipo_de_formulario__c in vscodeOrg (Tooling API CustomField.Id) -->
+  <input type="hidden" name="00NRp000000ewDQMAY" value="Sistemas Constructivos">
+  <!-- Standard Web-to-Lead fields (plain text, no 00N id). PI2_Country__c/PI2_State__c are lookups to CSPicklistData__c and can't be set directly via Web-to-Lead — the existing Flow PI2_Lead_SetAddress already resolves them automatically from these two standard text fields on every Lead insert/update, same as the org's other web forms. -->
+  <input type="hidden" name="country" value="México">
 
   <label for="firstname">Nombre</label>
   <input type="text" id="firstname" name="first_name" required>
@@ -707,57 +710,53 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
   <label for="phone">Número de teléfono:</label>
   <input type="tel" id="phone" name="phone" required>
 
-  <!-- REPLACE 00N... with the real Web-to-Lead field id for PI2_State__c. Same lookup-field caveat as PI2_Country__c above. -->
   <label for="estado">Estado:</label>
-  <select id="estado" name="00N_ESTADO" required>
+  <select id="estado" name="state" required>
     <option value="">Selecciona tu estado</option>
-    <option value="a2F5a0000030nG7EAI">Aguascalientes</option>
-    <option value="a2F5a0000030nG8EAI">Baja California</option>
-    <option value="a2F5a0000030nG9EAI">Baja California Sur</option>
-    <option value="a2F5a0000030nGAEAY">Campeche</option>
-    <option value="a2F5a0000030nGBEAY">Coahuila</option>
-    <option value="a2F5a0000030nGCEAY">Colima</option>
-    <option value="a2F5a0000030nGDEAY">Chiapas</option>
-    <option value="a2F5a0000030nGEEAY">Chihuahua</option>
-    <option value="a2F5a0000030nGFEAY">Ciudad de México</option>
-    <option value="a2F5a0000030nGdEAI">Distrito Federal</option>
-    <option value="a2F5a0000030nGGEAY">Durango</option>
-    <option value="a2F5a0000030nGHEAY">Guanajuato</option>
-    <option value="a2F5a0000030nGIEAY">Guerrero</option>
-    <option value="a2F5a0000030nGJEAY">Hidalgo</option>
-    <option value="a2F5a0000030nGKEAY">Jalisco</option>
-    <option value="a2F5a0000030nGLEAY">México (Estado)</option>
-    <option value="a2F5a0000030nGMEAY">Michoacán</option>
-    <option value="a2F5a0000030nGNEAY">Morelos</option>
-    <option value="a2F5a0000030nGOEAY">Nayarit</option>
-    <option value="a2F5a0000030nGPEAY">Nuevo León</option>
-    <option value="a2F5a0000030nGQEAY">Oaxaca</option>
-    <option value="a2F5a0000030nGREAY">Puebla</option>
-    <option value="a2F5a0000030nGSEAY">Querétaro</option>
-    <option value="a2F5a0000030nGTEAY">Quintana Roo</option>
-    <option value="a2F5a0000030nGUEAY">San Luis Potosí</option>
-    <option value="a2F5a0000030nGVEAY">Sinaloa</option>
-    <option value="a2F5a0000030nGWEAY">Sonora</option>
-    <option value="a2F5a0000030nGXEAY">Tabasco</option>
-    <option value="a2F5a0000030nGYEAY">Tamaulipas</option>
-    <option value="a2F5a0000030nGZEAY">Tlaxcala</option>
-    <option value="a2F5a0000030nGaEAI">Veracruz</option>
-    <option value="a2F5a0000030nGbEAI">Yucatán</option>
-    <option value="a2F5a0000030nGcEAI">Zacatecas</option>
+    <option value="AGUASCALIENTES">Aguascalientes</option>
+    <option value="BAJA CALIFORNIA">Baja California</option>
+    <option value="BAJA CALIFORNIA SUR">Baja California Sur</option>
+    <option value="CAMPECHE">Campeche</option>
+    <option value="COAHUILA">Coahuila</option>
+    <option value="COLIMA">Colima</option>
+    <option value="CHIAPAS">Chiapas</option>
+    <option value="CHIHUAHUA">Chihuahua</option>
+    <option value="CIUDAD DE MEXICO">Ciudad de México</option>
+    <option value="DURANGO">Durango</option>
+    <option value="GUANAJUATO">Guanajuato</option>
+    <option value="GUERRERO">Guerrero</option>
+    <option value="HIDALGO">Hidalgo</option>
+    <option value="JALISCO">Jalisco</option>
+    <option value="MEXICO">México (Estado)</option>
+    <option value="MICHOACAN">Michoacán</option>
+    <option value="MORELOS">Morelos</option>
+    <option value="NAYARIT">Nayarit</option>
+    <option value="NUEVO LEON">Nuevo León</option>
+    <option value="OAXACA">Oaxaca</option>
+    <option value="PUEBLA">Puebla</option>
+    <option value="QUERETARO">Querétaro</option>
+    <option value="QUINTANA ROO">Quintana Roo</option>
+    <option value="SAN LUIS POTOSI">San Luis Potosí</option>
+    <option value="SINALOA">Sinaloa</option>
+    <option value="SONORA">Sonora</option>
+    <option value="TABASCO">Tabasco</option>
+    <option value="TAMAULIPAS">Tamaulipas</option>
+    <option value="TLAXCALA">Tlaxcala</option>
+    <option value="VERACRUZ">Veracruz</option>
+    <option value="YUCATAN">Yucatán</option>
+    <option value="ZACATECAS">Zacatecas</option>
   </select>
 
-  <!-- REPLACE 00N... with the real Web-to-Lead field id for PI2_Producto_de_interes__c -->
   <label for="categoria">Categoria:</label>
-  <select id="categoria" name="00N_CATEGORIA" required>
+  <select id="categoria" name="00NRp000000ewDRMAY" required>
     <option value="">Selecciona una opción</option>
     <option value="Gaviones">Gaviones</option>
     <option value="Malla Ingenieria">Malla Ingenieria</option>
     <option value="Torón de presfuerzo">Torón de Presfuerzo</option>
   </select>
 
-  <!-- REPLACE 00N... with the real Web-to-Lead field id for PI2_Proyecto__c -->
   <label for="proyecto">Proyecto:</label>
-  <select id="proyecto" name="00N_PROYECTO" required>
+  <select id="proyecto" name="00NRp000000ewDSMAY" required>
     <option value="">Selecciona una opción</option>
     <option value="Parque industrial">Parque industrial</option>
     <option value="Edificación vertical">Edificación vertical</option>
@@ -767,9 +766,8 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
     <option value="Otro">Otro</option>
   </select>
 
-  <!-- REPLACE 00N... with the real Web-to-Lead field id for PI2_Cuentanos_tu_Proyecto__c -->
   <label for="cuentanos">¡Cuéntanos de tu proyecto!</label>
-  <textarea id="cuentanos" name="00N_CUENTANOS" rows="4" required></textarea>
+  <textarea id="cuentanos" name="00NRp000000ewDPMAY" rows="4" required></textarea>
 
   <div class="hs-form-privacy">
     <label>

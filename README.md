@@ -23,61 +23,72 @@ since some browsers restrict local file:// access for certain features).
 - `js/` — localized theme JS (`template_main.min.js`, `template_child.min.js`)
 - `images/` — all photos, icons, logos, and background images used on the page
 
-## Contact form — required setup before it will work
+## Contact form — how it's wired to Salesforce
 
 The original HubSpot embedded form was replaced with a plain HTML `<form>`
 (id `deacero-lead-form`) that posts directly to Salesforce Web-to-Lead
-(`https://webto.salesforce.com/servlet/servlet.WebToLead`). Before this form
-can actually create Leads in Salesforce, you must:
+(`https://webto.salesforce.com/servlet/servlet.WebToLead`). This is a
+declarative, no-code integration — no custom Apex/Flow was needed on the
+Salesforce side; everything below is either a native Web-to-Lead feature or
+already-existing automation in the org (ticket #25 in
+`ProyectoSalesforce/MiProyecto/tracker_solicitudes.csv`, resolved OOTB).
 
-1. **Enable Web-to-Lead** in Salesforce, if not already enabled
-   (Setup > Web-to-Lead).
+**Estado/País** are sent as plain text in the *standard* Web-to-Lead fields
+`state` and `country` (values must match `CSPicklistData__c.Name` exactly —
+State values are uppercase/unaccented, e.g. `NUEVO LEON`; Country is
+`México` with the accent). These are **not** lookup fields on the wire — the
+existing Flow `PI2_Lead_SetAddress` (already active in the org) resolves
+them into the real `PI2_State__c`/`PI2_Country__c` lookups automatically on
+insert, the same way every other Salesforce web form in this org already
+works.
 
-2. **Add the following custom fields** to the org's Web-to-Lead field list
-   (Setup > Web-to-Lead > Edit > add fields), then generate the HTML and
-   copy the real `00N_xxxxxxxxxxx` field names Salesforce assigns:
-   - `PI2_State__c`
-   - `PI2_Producto_de_interes__c`
-   - `PI2_Proyecto__c`
-   - `PI2_Cuentanos_tu_Proyecto__c`
-   - `PI2_Tipo_de_formulario__c`
-   - `PI2_Country__c`
+**Campaign linkage** uses Web-to-Lead's two reserved hidden fields —
+`Campaign_ID` and `member_status` — which natively create the Lead **and**
+its `CampaignMember` record in one submission. Both fields are required
+together; `Campaign_ID` alone does *not* create the association.
 
-3. **Replace every `00N_...` placeholder in `index.html`.** Search for
-   `00N_` in the file to find all 4 spots that need the real generated field
-   IDs:
-   - `name="00N_TIPO_FORMULARIO"` → PI2_Tipo_de_formulario__c
-   - `name="00N_COUNTRY"` → PI2_Country__c
-   - `name="00N_ESTADO"` → PI2_State__c
-   - `name="00N_CATEGORIA"` → PI2_Producto_de_interes__c
-   - `name="00N_PROYECTO"` → PI2_Proyecto__c
-   - `name="00N_CUENTANOS"` → PI2_Cuentanos_tu_Proyecto__c
+The other custom fields (`PI2_Tipo_de_formulario__c`, `PI2_Producto_de_interes__c`,
+`PI2_Proyecto__c`, `PI2_Cuentanos_tu_Proyecto__c`) are sent via the standard
+Web-to-Lead custom-field mechanism, `name="00Nxxxxxxxxxxxxxxx"` (the field's
+own Salesforce Id, fetched via Tooling API — no need to run the Setup >
+Web-to-Lead HTML generator by hand).
 
-   (Note: there are 6 fields listed above but only 4 distinct `00N_` inputs
-   need replacing in the sense of "placeholder groups" — in practice just
-   replace all 6 `name="00N_..."` attributes with the real field IDs
-   Salesforce generates.)
+### Per-environment values currently baked into `index.html`
 
-4. **Replace the placeholder `oid` value** (`00Dxxxxxxxxxxxxxxx`) with the
-   org's real Web-to-Lead Organization Id.
+These are all **vscodeOrg (dev sandbox)** values — replace before promoting
+to UAT/PROD:
 
-## Flagged risk: lookup fields via Web-to-Lead
+| Hidden field | Current value | Meaning |
+|---|---|---|
+| `oid` | `00Dxxxxxxxxxxxxxxx` (placeholder, **not set yet**) | Org Id — get from Setup > Web-to-Lead in the target org |
+| `Campaign_ID` | `701cb000012Q8oRAAS` | Campaign "Sistemas Constructivos - Landing Generica", created in vscodeOrg |
+| `member_status` | `Responded` | Valid CampaignMemberStatus on that Campaign |
+| `00NRp000000ewDQMAY` | → `PI2_Tipo_de_formulario__c` | |
+| `00NRp000000ewDRMAY` | → `PI2_Producto_de_interes__c` | |
+| `00NRp000000ewDSMAY` | → `PI2_Proyecto__c` | |
+| `00NRp000000ewDPMAY` | → `PI2_Cuentanos_tu_Proyecto__c` | |
 
-`PI2_State__c` and `PI2_Country__c` are **lookup fields** that reference a
-custom object (`CSPicklistData__c`) from an installed package. Salesforce's
-plain Web-to-Lead POST is **not guaranteed** to populate lookup fields
-correctly — this is a known limitation of the Web-to-Lead mechanism, which
-was designed mainly for plain text/picklist fields.
+To move to UAT/PROD: re-run the same Tooling API query per environment
+(`SELECT Id, DeveloperName FROM CustomField WHERE TableEnumOrId='Lead' AND
+DeveloperName IN (...)`, Tooling API) to get that org's own `00N` ids (they
+differ per org), create/confirm the target Campaign there, and set the real
+`oid`.
 
-**Test a real form submission** and check whether the resulting Lead's
-Estado/Country fields actually saved. If they don't:
+## Campaign variants
 
-- The fix is a small backend (e.g. a Salesforce Apex REST endpoint, or a
-  cloud function/Lambda) that receives the form POST and performs an
-  **authenticated Lead insert via the Salesforce API** instead of relying on
-  the public Web-to-Lead endpoint. An authenticated API call can set lookup
-  field values reliably (by passing the referenced record's Id), whereas
-  Web-to-Lead cannot guarantee this.
+Each marketing campaign that needs its own version of this landing page
+should be a **sibling folder** reusing the same `css/`, `js/`, and `images/`
+(don't duplicate megabytes of assets per variant):
+
+1. Copy `index.html` into a new folder, e.g. `campana-expo-construccion/index.html`.
+2. Adjust hero copy/creative for that campaign as needed.
+3. In Salesforce, create (or reuse) the Campaign for that initiative, and
+   note its Id + a valid `CampaignMemberStatus` label.
+4. In the variant's `index.html`, update `Campaign_ID` and `member_status`
+   to that Campaign. Everything else (form fields, styling, `oid`) stays the
+   same.
+5. Relative asset paths (`css/...`, `js/...`, `images/...`) keep working
+   as-is since the variant folder sits next to the shared asset folders.
 
 ## Intentional omissions (product decisions)
 
