@@ -13,6 +13,10 @@
   flex-direction: column;
   gap: 18px;
   max-width: 640px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
 }
 
 #deacero-lead-form .form-row {
@@ -32,7 +36,7 @@
   font-size: 14px !important;
   font-weight: 600 !important;
   margin-bottom: 7px !important;
-  color: #ffffff !important;
+  color: #002d6f !important;
 }
 
 #deacero-lead-form input[type="text"],
@@ -43,8 +47,8 @@
   width: 100% !important;
   box-sizing: border-box !important;
   border: 1px solid #d8d8d8 !important;
-  border-radius: 8px !important;
-  padding: 13px 14px !important;
+  border-radius: 12px !important;
+  padding: 13px 16px !important;
   font-size: 15px !important;
   line-height: 1.3 !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
@@ -83,6 +87,7 @@
   align-items: flex-start;
   gap: 8px;
   font-weight: 400 !important;
+  color: #444444 !important;
   cursor: pointer;
 }
 
@@ -95,25 +100,44 @@
 }
 
 #deacero-lead-form .hs-form-privacy a {
-  color: #ffffff;
+  color: #002d6f;
+  font-weight: 600;
   text-decoration: underline;
 }
 
-#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"] {
-  align-self: flex-start !important;
-  border-radius: 6px !important;
+/* Shared rounded-button treatment for every .hs-button on the page
+   (form submit + the standalone CTA link near the second contact block) */
+.hs-button {
+  display: inline-block;
+  border-radius: 999px !important;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
 }
 
-#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"]:hover {
+a.hs-button {
+  background-color: #002d6f;
+  color: #ffffff !important;
+  font-weight: 600;
+  font-family: Arial, sans-serif;
+  padding: 12px 32px;
+  text-decoration: none !important;
+}
+
+.hs-button:hover {
   background-color: #013b8f !important;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
 }
 
-#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"]:active {
+.hs-button:active {
   transform: translateY(0);
+}
+
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"] {
+  align-self: flex-start !important;
+  border-radius: 999px !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
 }
 
 /* Tablet and up: two-column rows for paired fields */
@@ -123,8 +147,13 @@
   }
 }
 
-/* Mobile: stack any two-up row into a single column */
+/* Mobile: stack any two-up row into a single column, tighten card padding */
 @media (max-width: 767px) {
+  #deacero-lead-form {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
   #deacero-lead-form .form-row {
     flex-direction: column;
     gap: 18px;
