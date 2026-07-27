@@ -61,6 +61,7 @@ a.cta_button{-moz-box-sizing:content-box !important;-webkit-box-sizing:content-b
   </style>
 
 <link rel="stylesheet" href="css/module_follow_me_lp.min.css">
+<link rel="stylesheet" href="css/lead-form.css">
 
 	<style>
     
@@ -698,85 +699,104 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
   <!-- Standard Web-to-Lead fields (plain text, no 00N id). PI2_Country__c/PI2_State__c are lookups to CSPicklistData__c and can't be set directly via Web-to-Lead — the existing Flow PI2_Lead_SetAddress already resolves them automatically from these two standard text fields on every Lead insert/update, same as the org's other web forms. -->
   <input type="hidden" name="country" value="México">
 
-  <label for="firstname">Nombre</label>
-  <input type="text" id="firstname" name="first_name" required>
+  <div class="form-row" data-aos="fade-up">
+    <div class="form-field">
+      <label for="firstname">Nombre</label>
+      <input type="text" id="firstname" name="first_name" required>
+    </div>
+    <div class="form-field">
+      <label for="lastname">Apellidos</label>
+      <input type="text" id="lastname" name="last_name" required>
+    </div>
+  </div>
 
-  <label for="lastname">Apellidos</label>
-  <input type="text" id="lastname" name="last_name" required>
+  <div class="form-row" data-aos="fade-up" data-aos-delay="80">
+    <div class="form-field">
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="email" placeholder="Ejemplo: usuario@ejemplo.com.mx" required>
+    </div>
+    <div class="form-field">
+      <label for="phone">Número de teléfono:</label>
+      <input type="tel" id="phone" name="phone" required>
+    </div>
+  </div>
 
-  <label for="email">Correo electrónico:</label>
-  <input type="email" id="email" name="email" placeholder="Ejemplo: usuario@ejemplo.com.mx" required>
+  <div class="form-row" data-aos="fade-up" data-aos-delay="120">
+    <div class="form-field">
+      <label for="estado">Estado:</label>
+      <select id="estado" name="state" required>
+        <option value="">Selecciona tu estado</option>
+        <option value="AGUASCALIENTES">Aguascalientes</option>
+        <option value="BAJA CALIFORNIA">Baja California</option>
+        <option value="BAJA CALIFORNIA SUR">Baja California Sur</option>
+        <option value="CAMPECHE">Campeche</option>
+        <option value="COAHUILA">Coahuila</option>
+        <option value="COLIMA">Colima</option>
+        <option value="CHIAPAS">Chiapas</option>
+        <option value="CHIHUAHUA">Chihuahua</option>
+        <option value="CIUDAD DE MEXICO">Ciudad de México</option>
+        <option value="DURANGO">Durango</option>
+        <option value="GUANAJUATO">Guanajuato</option>
+        <option value="GUERRERO">Guerrero</option>
+        <option value="HIDALGO">Hidalgo</option>
+        <option value="JALISCO">Jalisco</option>
+        <option value="MEXICO">México (Estado)</option>
+        <option value="MICHOACAN">Michoacán</option>
+        <option value="MORELOS">Morelos</option>
+        <option value="NAYARIT">Nayarit</option>
+        <option value="NUEVO LEON">Nuevo León</option>
+        <option value="OAXACA">Oaxaca</option>
+        <option value="PUEBLA">Puebla</option>
+        <option value="QUERETARO">Querétaro</option>
+        <option value="QUINTANA ROO">Quintana Roo</option>
+        <option value="SAN LUIS POTOSI">San Luis Potosí</option>
+        <option value="SINALOA">Sinaloa</option>
+        <option value="SONORA">Sonora</option>
+        <option value="TABASCO">Tabasco</option>
+        <option value="TAMAULIPAS">Tamaulipas</option>
+        <option value="TLAXCALA">Tlaxcala</option>
+        <option value="VERACRUZ">Veracruz</option>
+        <option value="YUCATAN">Yucatán</option>
+        <option value="ZACATECAS">Zacatecas</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label for="categoria">Categoria:</label>
+      <select id="categoria" name="00NRp000000ewDRMAY" required>
+        <option value="">Selecciona una opción</option>
+        <option value="Gaviones">Gaviones</option>
+        <option value="Malla Ingenieria">Malla Ingenieria</option>
+        <option value="Torón de presfuerzo">Torón de Presfuerzo</option>
+      </select>
+    </div>
+  </div>
 
-  <label for="phone">Número de teléfono:</label>
-  <input type="tel" id="phone" name="phone" required>
+  <div class="form-field" data-aos="fade-up" data-aos-delay="160">
+    <label for="proyecto">Proyecto:</label>
+    <select id="proyecto" name="00NRp000000ewDSMAY" required>
+      <option value="">Selecciona una opción</option>
+      <option value="Parque industrial">Parque industrial</option>
+      <option value="Edificación vertical">Edificación vertical</option>
+      <option value="Minería">Minería</option>
+      <option value="Infraestructura">Infraestructura</option>
+      <option value="Control de erosión">Control de erosión</option>
+      <option value="Otro">Otro</option>
+    </select>
+  </div>
 
-  <label for="estado">Estado:</label>
-  <select id="estado" name="state" required>
-    <option value="">Selecciona tu estado</option>
-    <option value="AGUASCALIENTES">Aguascalientes</option>
-    <option value="BAJA CALIFORNIA">Baja California</option>
-    <option value="BAJA CALIFORNIA SUR">Baja California Sur</option>
-    <option value="CAMPECHE">Campeche</option>
-    <option value="COAHUILA">Coahuila</option>
-    <option value="COLIMA">Colima</option>
-    <option value="CHIAPAS">Chiapas</option>
-    <option value="CHIHUAHUA">Chihuahua</option>
-    <option value="CIUDAD DE MEXICO">Ciudad de México</option>
-    <option value="DURANGO">Durango</option>
-    <option value="GUANAJUATO">Guanajuato</option>
-    <option value="GUERRERO">Guerrero</option>
-    <option value="HIDALGO">Hidalgo</option>
-    <option value="JALISCO">Jalisco</option>
-    <option value="MEXICO">México (Estado)</option>
-    <option value="MICHOACAN">Michoacán</option>
-    <option value="MORELOS">Morelos</option>
-    <option value="NAYARIT">Nayarit</option>
-    <option value="NUEVO LEON">Nuevo León</option>
-    <option value="OAXACA">Oaxaca</option>
-    <option value="PUEBLA">Puebla</option>
-    <option value="QUERETARO">Querétaro</option>
-    <option value="QUINTANA ROO">Quintana Roo</option>
-    <option value="SAN LUIS POTOSI">San Luis Potosí</option>
-    <option value="SINALOA">Sinaloa</option>
-    <option value="SONORA">Sonora</option>
-    <option value="TABASCO">Tabasco</option>
-    <option value="TAMAULIPAS">Tamaulipas</option>
-    <option value="TLAXCALA">Tlaxcala</option>
-    <option value="VERACRUZ">Veracruz</option>
-    <option value="YUCATAN">Yucatán</option>
-    <option value="ZACATECAS">Zacatecas</option>
-  </select>
+  <div class="form-field" data-aos="fade-up" data-aos-delay="200">
+    <label for="cuentanos">¡Cuéntanos de tu proyecto!</label>
+    <textarea id="cuentanos" name="00NRp000000ewDPMAY" rows="4" required></textarea>
+  </div>
 
-  <label for="categoria">Categoria:</label>
-  <select id="categoria" name="00NRp000000ewDRMAY" required>
-    <option value="">Selecciona una opción</option>
-    <option value="Gaviones">Gaviones</option>
-    <option value="Malla Ingenieria">Malla Ingenieria</option>
-    <option value="Torón de presfuerzo">Torón de Presfuerzo</option>
-  </select>
-
-  <label for="proyecto">Proyecto:</label>
-  <select id="proyecto" name="00NRp000000ewDSMAY" required>
-    <option value="">Selecciona una opción</option>
-    <option value="Parque industrial">Parque industrial</option>
-    <option value="Edificación vertical">Edificación vertical</option>
-    <option value="Minería">Minería</option>
-    <option value="Infraestructura">Infraestructura</option>
-    <option value="Control de erosión">Control de erosión</option>
-    <option value="Otro">Otro</option>
-  </select>
-
-  <label for="cuentanos">¡Cuéntanos de tu proyecto!</label>
-  <textarea id="cuentanos" name="00NRp000000ewDPMAY" rows="4" required></textarea>
-
-  <div class="hs-form-privacy">
+  <div class="hs-form-privacy" data-aos="fade-up" data-aos-delay="240">
     <label>
       <input type="checkbox" id="privacidad" required>
-      He leído y acepto el <a href="https://www.deacero.com/aviso-de-privacidad" target="_blank" rel="noopener">Aviso de privacidad</a>
+      <span>He leído y acepto el <a href="https://www.deacero.com/aviso-de-privacidad" target="_blank" rel="noopener">Aviso de privacidad</a></span>
     </label>
   </div>
 
-  <input type="submit" class="hs-button" value="Enviar">
+  <input type="submit" class="hs-button" value="Enviar" data-aos="fade-up" data-aos-delay="280">
 </form>
 
 

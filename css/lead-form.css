@@ -1,0 +1,145 @@
+/* Custom layout for #deacero-lead-form — overrides the legacy HubSpot editor
+   rules on #hs_cos_wrapper_widget_1690225387286 (many use !important with a
+   generic `label` selector, including a buggy line-height:4px that squashed
+   every label). Loaded after template CSS so normal-specificity rules here
+   still need !important to win against those. */
+
+#hs_cos_wrapper_widget_1690225387286 .form-title {
+  margin-bottom: 24px !important;
+}
+
+#deacero-lead-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 640px;
+}
+
+#deacero-lead-form .form-row {
+  display: flex;
+  gap: 16px;
+}
+
+#deacero-lead-form .form-field {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form label:not(.hs-error-msg) {
+  line-height: 1.3 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin-bottom: 7px !important;
+  color: #ffffff !important;
+}
+
+#deacero-lead-form input[type="text"],
+#deacero-lead-form input[type="email"],
+#deacero-lead-form input[type="tel"],
+#deacero-lead-form select,
+#deacero-lead-form textarea {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border: 1px solid #d8d8d8 !important;
+  border-radius: 8px !important;
+  padding: 13px 14px !important;
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+#deacero-lead-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+#deacero-lead-form input:focus,
+#deacero-lead-form select:focus,
+#deacero-lead-form textarea:focus {
+  outline: none !important;
+  border-color: #002d6f !important;
+  box-shadow: 0 0 0 3px rgba(0, 45, 111, 0.18) !important;
+}
+
+#deacero-lead-form select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23002D6F' d='M5.5 7.5l4.5 4.5 4.5-4.5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+  padding-right: 38px !important;
+}
+
+#deacero-lead-form .hs-form-privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+#deacero-lead-form .hs-form-privacy label {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 8px;
+  font-weight: 400 !important;
+  cursor: pointer;
+}
+
+#deacero-lead-form .hs-form-privacy input[type="checkbox"] {
+  margin-top: 3px;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  accent-color: #002d6f;
+}
+
+#deacero-lead-form .hs-form-privacy a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"] {
+  align-self: flex-start !important;
+  border-radius: 6px !important;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+}
+
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"]:hover {
+  background-color: #013b8f !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+#hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* Tablet and up: two-column rows for paired fields */
+@media (min-width: 768px) {
+  #deacero-lead-form {
+    max-width: 100%;
+  }
+}
+
+/* Mobile: stack any two-up row into a single column */
+@media (max-width: 767px) {
+  #deacero-lead-form .form-row {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  #hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"] {
+    align-self: stretch !important;
+    text-align: center;
+  }
+}
+
+/* Respect users who've asked for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #deacero-lead-form *,
+  #hs_cos_wrapper_widget_1690225387286 #deacero-lead-form input[type="submit"] {
+    transition: none !important;
+  }
+}
