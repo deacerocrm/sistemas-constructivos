@@ -53,6 +53,39 @@ Web-to-Lead custom-field mechanism, `name="00Nxxxxxxxxxxxxxxx"` (the field's
 own Salesforce Id, fetched via Tooling API — no need to run the Setup >
 Web-to-Lead HTML generator by hand).
 
+### ✅ Verified end-to-end (2026-07-28, against vscodeOrg)
+
+A real test submission was posted to Salesforce and confirmed by querying the
+resulting records directly:
+
+- Lead created with all standard + custom fields correct.
+- `State`/`Country` (plain text) correctly resolved by the existing Flow
+  `PI2_Lead_SetAddress` into the real lookups: `PI2_State__c` → "NUEVO LEON",
+  `PI2_Country__c` → "México".
+- `CampaignMember` created automatically, linked to "Sistemas Constructivos -
+  Landing Generica", `Status = "Responded"`.
+
+Two real gotchas were found and fixed along the way:
+
+1. **Sandboxes must POST to `https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=<oid>`**,
+   not `https://webto.salesforce.com/...` (that's production-only). Using the
+   wrong host doesn't error — it just silently never creates the Lead. Get the
+   exact `action=` URL by generating a Web-to-Lead form once in that org's
+   Setup (Setup > Web-to-Lead > Create Web-to-Lead Form) and copying it from
+   there, since it differs per org type.
+2. **Accented values (like `país=México`) must reach Salesforce as real UTF-8
+   bytes** or the address-resolution Flow silently fails to match *both*
+   State and Country (not just the corrupted field) — our page's
+   `<meta charset="utf-8">` guarantees this for real browser submissions;
+   this only bit us during manual `curl` testing with a misconfigured shell
+   locale.
+
+Also: `Enable Web-to-Lead` alone (the org-wide checkbox) is not sufficient —
+Salesforce also needs at least one Web-to-Lead form actually generated once
+via Setup ("Lead Capture Page: Not available" is the error if none exists
+yet, sent back via `debug=1`/`debugEmail=...` hidden fields — the official
+way to diagnose a silent Web-to-Lead failure).
+
 ### Per-environment values currently baked into `index.html`
 
 These are all **vscodeOrg (dev sandbox)** values — replace before promoting
@@ -60,19 +93,22 @@ to UAT/PROD:
 
 | Hidden field | Current value | Meaning |
 |---|---|---|
-| `oid` | `00Dxxxxxxxxxxxxxxx` (placeholder, **not set yet**) | Org Id — get from Setup > Web-to-Lead in the target org |
+| form `action` | `https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcb00000EycJY` | Sandbox endpoint — switch to `https://webto.salesforce.com/servlet/servlet.WebToLead` (no orgId query param) for PROD |
+| `oid` | `00Dcb00000EycJY` | vscodeOrg's real Web-to-Lead Organization Id (15-char) |
 | `Campaign_ID` | `701cb000012Q8oRAAS` | Campaign "Sistemas Constructivos - Landing Generica", created in vscodeOrg |
 | `member_status` | `Responded` | Valid CampaignMemberStatus on that Campaign |
-| `00NRp000000ewDQMAY` | → `PI2_Tipo_de_formulario__c` | |
-| `00NRp000000ewDRMAY` | → `PI2_Producto_de_interes__c` | |
-| `00NRp000000ewDSMAY` | → `PI2_Proyecto__c` | |
-| `00NRp000000ewDPMAY` | → `PI2_Cuentanos_tu_Proyecto__c` | |
+| `00NRp000000ewDQ` | → `PI2_Tipo_de_formulario__c` | |
+| `00NRp000000ewDR` | → `PI2_Producto_de_interes__c` | |
+| `00NRp000000ewDS` | → `PI2_Proyecto__c` | |
+| `00NRp000000ewDP` | → `PI2_Cuentanos_tu_Proyecto__c` | |
 
-To move to UAT/PROD: re-run the same Tooling API query per environment
-(`SELECT Id, DeveloperName FROM CustomField WHERE TableEnumOrId='Lead' AND
-DeveloperName IN (...)`, Tooling API) to get that org's own `00N` ids (they
-differ per org), create/confirm the target Campaign there, and set the real
-`oid`.
+To move to UAT/PROD: generate a Web-to-Lead form once in that org's Setup
+(Setup > Web-to-Lead > Create Web-to-Lead Form, selecting the same fields —
+see the ticket #25 notes in `tracker_solicitudes.csv` for the exact list) to
+get that org's own `action=` URL and `00N` ids (they differ per org),
+create/confirm the target Campaign there, and set the real `oid`. Then repeat
+the same kind of test (optionally with `debug=1`/`debugEmail=` hidden fields)
+before trusting it with real traffic.
 
 ## Campaign variants
 

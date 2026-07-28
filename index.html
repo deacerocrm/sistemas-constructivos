@@ -685,18 +685,24 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
 
 	<span id="hs_cos_wrapper_widget_1690225387286_" class="hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_form" style="" data-hs-cos-general-type="widget" data-hs-cos-type="form"><h3 id="hs_cos_wrapper_widget_1690225387286_title" class="hs_cos_wrapper form-title" data-hs-cos-general-type="widget_field" data-hs-cos-type="text">Compártenos tus datos y nos pondremos en contacto:</h3>
 
-<form action="https://webto.salesforce.com/servlet/servlet.WebToLead" method="POST" class="hs-form stacked hs-custom-form" id="deacero-lead-form">
-  <!-- Org Id: REPLACE with your Salesforce org's real Web-to-Lead Organization Id (Setup > Web-to-Lead). Currently unset — get it from vscodeOrg/UAT/PROD as appropriate before going live. -->
-  <input type="hidden" name="oid" value="00Dxxxxxxxxxxxxxxx">
+<!-- VERIFIED END-TO-END 2026-07-28 against vscodeOrg (sandbox): real Lead created, State/Country
+     resolved via PI2_Lead_SetAddress, CampaignMember created. See README for the sandbox-vs-prod
+     endpoint gotcha and the exact test evidence. -->
+<form action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&amp;orgId=00Dcb00000EycJY" method="POST" class="hs-form stacked hs-custom-form" id="deacero-lead-form">
+  <!-- Sandboxes MUST post to test.salesforce.com (see action= above), NOT webto.salesforce.com.
+       Production uses webto.salesforce.com with no orgId query param needed. Both oid values
+       below (query string + hidden field) must match and use the SAME org's Id when you switch environments. -->
+  <input type="hidden" name="oid" value="00Dcb00000EycJY">
   <input type="hidden" name="retURL" value="https://landing.deacero.com/sistemas-constructivos-gracias">
   <!-- Lead.Company is required by Salesforce and not asked on this form; using a placeholder. Consider adding a real "Empresa" field instead. -->
   <input type="hidden" name="company" value="Sin especificar">
+  <input type="hidden" name="lead_source" value="Web">
   <!-- Native Web-to-Lead reserved fields (no 00N id, no custom field needed): links the Lead to a Campaign and creates its CampaignMember. Both are required together — Campaign_ID alone does NOT create the association. Currently pointed at "Sistemas Constructivos - Landing Generica" in vscodeOrg (701cb000012Q8oRAAS); replace per environment/campaign variant. -->
   <input type="hidden" name="Campaign_ID" value="701cb000012Q8oRAAS">
   <input type="hidden" name="member_status" value="Responded">
-  <!-- Real Web-to-Lead field id for PI2_Tipo_de_formulario__c in vscodeOrg (Tooling API CustomField.Id) -->
-  <input type="hidden" name="00NRp000000ewDQMAY" value="Sistemas Constructivos">
-  <!-- Standard Web-to-Lead fields (plain text, no 00N id). PI2_Country__c/PI2_State__c are lookups to CSPicklistData__c and can't be set directly via Web-to-Lead — the existing Flow PI2_Lead_SetAddress already resolves them automatically from these two standard text fields on every Lead insert/update, same as the org's other web forms. -->
+  <!-- Real Web-to-Lead field id for PI2_Tipo_de_formulario__c in vscodeOrg, confirmed via the org's own generated Web-to-Lead HTML -->
+  <input type="hidden" name="00NRp000000ewDQ" value="Sistemas Constructivos">
+  <!-- Standard Web-to-Lead fields (plain text, no 00N id). PI2_Country__c/PI2_State__c are lookups to CSPicklistData__c and can't be set directly via Web-to-Lead — the existing Flow PI2_Lead_SetAddress already resolves them automatically from these two standard text fields on every Lead insert/update, same as the org's other web forms. IMPORTANT: this value must reach Salesforce as real UTF-8 bytes (é) or the lookup silently fails to match — our page's <meta charset="utf-8"> already guarantees this for real browser submissions. -->
   <input type="hidden" name="country" value="México">
 
   <div class="form-row" data-aos="fade-up">
@@ -762,7 +768,7 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
     </div>
     <div class="form-field">
       <label for="categoria">Categoria:</label>
-      <select id="categoria" name="00NRp000000ewDRMAY" required>
+      <select id="categoria" name="00NRp000000ewDR" required>
         <option value="">Selecciona una opción</option>
         <option value="Gaviones">Gaviones</option>
         <option value="Malla Ingenieria">Malla Ingenieria</option>
@@ -773,7 +779,7 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
 
   <div class="form-field" data-aos="fade-up" data-aos-delay="160">
     <label for="proyecto">Proyecto:</label>
-    <select id="proyecto" name="00NRp000000ewDSMAY" required>
+    <select id="proyecto" name="00NRp000000ewDS" required>
       <option value="">Selecciona una opción</option>
       <option value="Parque industrial">Parque industrial</option>
       <option value="Edificación vertical">Edificación vertical</option>
@@ -786,7 +792,7 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
 
   <div class="form-field" data-aos="fade-up" data-aos-delay="200">
     <label for="cuentanos">¡Cuéntanos de tu proyecto!</label>
-    <textarea id="cuentanos" name="00NRp000000ewDPMAY" rows="4" required></textarea>
+    <textarea id="cuentanos" name="00NRp000000ewDP" rows="4" required></textarea>
   </div>
 
   <div class="hs-form-privacy" data-aos="fade-up" data-aos-delay="240">
