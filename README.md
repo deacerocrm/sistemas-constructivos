@@ -26,8 +26,9 @@ since some browsers restrict local file:// access for certain features).
 ## Contact form — how it's wired to Salesforce
 
 The original HubSpot embedded form was replaced with a plain HTML `<form>`
-(id `deacero-lead-form`) that posts directly to Salesforce Web-to-Lead
-(`https://webto.salesforce.com/servlet/servlet.WebToLead`). This is a
+(id `deacero-lead-form`) that posts directly to Salesforce Web-to-Lead, en el
+**My Domain del org** (`https://<my-domain>/servlet/servlet.WebToLead`; los hosts
+genéricos ya no funcionan — ver la nota del 2026-09-10). This is a
 declarative, no-code integration — no custom Apex/Flow was needed on the
 Salesforce side; everything below is either a native Web-to-Lead feature or
 already-existing automation in the org (ticket #25 in
@@ -65,14 +66,43 @@ resulting records directly:
 - `CampaignMember` created automatically, linked to "Sistemas Constructivos -
   Landing Generica", `Status = "Responded"`.
 
+### ⚠️ 2026-09-10 — los endpoints genéricos dejaron de funcionar
+
+La integración se rompió sola entre el 1 y el 10 de septiembre de 2026, sin que
+nadie tocara el archivo: **Salesforce retiró los endpoints genéricos de
+Web-to-Lead.** El último Lead que entró por `test.salesforce.com` fue el
+2026-09-01.
+
+Diagnóstico, con el mismo POST enviado a los dos hosts el 2026-09-10:
+
+| Endpoint | Respuesta |
+|---|---|
+| `https://test.salesforce.com/servlet/servlet.WebToLead?...&orgId=<oid>` | ❌ `Reason: Your Lead could not be processed. Lead Capture Page: Not available.` |
+| `https://deacero-2018--preprod2.sandbox.my.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8` | ✅ `Your request has been queued.` — Lead creado |
+
+**El mensaje `Lead Capture Page: Not available` es engañoso.** Suena a que falta
+generar el formulario en Setup (y así lo decía este README), pero no es eso:
+generarlo de nuevo no cambió nada. El error significa que **ese host ya no
+resuelve la página de captura del org**. La solución es postear al My Domain.
+
+Cómo obtener el host correcto de cualquier ambiente:
+
+```
+sf org display --target-org <alias>     # usar el valor de instanceUrl
+```
+
+Si algún día vuelve a fallar en silencio, el camino de diagnóstico es el mismo:
+mandar el POST con `debug=1` y `debugEmail=` y leer el `Reason:` que regresa.
+
+---
+
 Two real gotchas were found and fixed along the way:
 
-1. **Sandboxes must POST to `https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=<oid>`**,
-   not `https://webto.salesforce.com/...` (that's production-only). Using the
-   wrong host doesn't error — it just silently never creates the Lead. Get the
-   exact `action=` URL by generating a Web-to-Lead form once in that org's
-   Setup (Setup > Web-to-Lead > Create Web-to-Lead Form) and copying it from
-   there, since it differs per org type.
+1. ~~**Sandboxes must POST to `https://test.salesforce.com/...`**~~ — **OBSOLETO,
+   ver la nota de 2026-09-10 más abajo.** Ningún host genérico de Salesforce
+   funciona ya; hay que postear al My Domain del org. Lo que sigue siendo cierto
+   es la parte importante: **usar el host equivocado no da error, simplemente
+   nunca crea el Lead.**
 2. **Accented values (like `país=México`) must reach Salesforce as real UTF-8
    bytes** or the address-resolution Flow silently fails to match *both*
    State and Country (not just the corrupted field) — our page's
@@ -93,7 +123,7 @@ to UAT/PROD:
 
 | Hidden field | Current value | Meaning |
 |---|---|---|
-| form `action` | `https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcb00000EycJY` | Sandbox endpoint — switch to `https://webto.salesforce.com/servlet/servlet.WebToLead` (no orgId query param) for PROD |
+| form `action` | `https://deacero-2018--preprod2.sandbox.my.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8` | **My Domain del org**, no un host genérico. Por ambiente: PROD es `https://deacero-2018.my.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8`. Sácalo con `sf org display --target-org <alias>` (campo `instanceUrl`) |
 | `oid` | `00Dcb00000EycJY` | vscodeOrg's real Web-to-Lead Organization Id (15-char) |
 | `Campaign_ID` | `701cb000012Q8oRAAS` | Campaign "Sistemas Constructivos - Landing Generica", created in vscodeOrg |
 | `member_status` | `Responded` | Valid CampaignMemberStatus on that Campaign |

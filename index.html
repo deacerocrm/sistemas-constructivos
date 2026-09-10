@@ -688,10 +688,25 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
 <!-- VERIFIED END-TO-END 2026-07-28 against vscodeOrg (sandbox): real Lead created, State/Country
      resolved via PI2_Lead_SetAddress, CampaignMember created. See README for the sandbox-vs-prod
      endpoint gotcha and the exact test evidence. -->
-<form action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&amp;orgId=00Dcb00000EycJY" method="POST" class="hs-form stacked hs-custom-form" id="deacero-lead-form">
-  <!-- Sandboxes MUST post to test.salesforce.com (see action= above), NOT webto.salesforce.com.
-       Production uses webto.salesforce.com with no orgId query param needed. Both oid values
-       below (query string + hidden field) must match and use the SAME org's Id when you switch environments. -->
+<form action="https://deacero-2018--preprod2.sandbox.my.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST" class="hs-form stacked hs-custom-form" id="deacero-lead-form">
+  <!-- EL ENDPOINT ES EL MY DOMAIN DEL ORG, no un host generico de Salesforce.
+       Los endpoints genericos (webto.salesforce.com y test.salesforce.com) YA NO
+       FUNCIONAN: devuelven "Lead Capture Page: Not available" y nunca crean el
+       Lead. Verificado el 2026-09-10 contra preprod2 -- el mismo POST fallo
+       contra test.salesforce.com y paso ("Your request has been queued") contra
+       este host. Esto reemplaza la instruccion anterior de este archivo y del
+       README, que decia justo lo contrario y quedo obsoleta por un cambio de
+       plataforma de Salesforce.
+
+       El My Domain identifica al org, asi que el parametro orgId de la URL sobra;
+       el campo oculto oid de abajo SI se sigue requiriendo.
+
+       Por ambiente, cambiar el host por el My Domain correspondiente:
+         preprod2 : https://deacero-2018--preprod2.sandbox.my.salesforce.com
+         UAT      : https://deacero-2018--<sandbox>.sandbox.my.salesforce.com
+         PROD     : https://deacero-2018.my.salesforce.com
+       Sacalo con: sf org display --target-org <alias>  (campo instanceUrl).
+       Y actualiza tambien el oid, el Campaign_ID y los ids 00N, que cambian por org. -->
   <input type="hidden" name="oid" value="00Dcb00000EycJY">
   <input type="hidden" name="retURL" value="https://landing.deacero.com/sistemas-constructivos-gracias">
   <!-- Lead.Company is required by Salesforce and not asked on this form; using a placeholder. Consider adding a real "Empresa" field instead. -->
