@@ -790,7 +790,57 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
     </select>
   </div>
 
+  <!-- ============================================================================
+       RUTEO SPG — cantidad y unidad de venta
+       ============================================================================
+       El Motor de Reglas Dinamico (Rule__c, Target_Object__c = 'Lead') asigna el
+       Lead al ejecutivo de cuenta clave comparando CUATRO campos con logica AND:
+       segmento, subproducto, cantidad y unidad de venta. Si falta uno, ninguna
+       regla puede cumplirse y el lead se queda con el dueno por defecto.
+
+       Segmento y subproducto se derivan de los selects "Proyecto" y "Categoria"
+       que ya existian (ver el script al final del form). Cantidad y unidad NO
+       existian en ningun lugar del formulario: son estos dos campos.
+
+       La unidad es criterio por si misma, no una etiqueta: el mismo producto tiene
+       umbrales distintos segun la unidad (Malla de Ingenieria enruta desde 1500
+       Metros Lineales en Edificacion pero desde 200 Piezas en Prefabricados).
+       Solo se ofrecen las 4 unidades que las reglas de SPG evaluan; las otras dos
+       del picklist (Metros Cuadrados, Metros Cubicos) no tienen regla y serian un
+       callejon sin salida.
+       ============================================================================ -->
   <div class="form-field" data-aos="fade-up" data-aos-delay="200">
+    <label for="spg_cantidad">Cantidad aproximada:</label>
+    <input type="number" id="spg_cantidad" name="00Ncb00000c0HEx" min="0" step="any"
+           placeholder="Solo el numero, ejemplo: 1.2" required>
+  </div>
+
+  <div class="form-field" data-aos="fade-up" data-aos-delay="210">
+    <label for="spg_unidad">Unidad de venta:</label>
+    <select id="spg_unidad" name="00NRp000000cfTZ" required>
+      <option value="">Selecciona una opción</option>
+      <option value="Piezas">Piezas</option>
+      <option value="Kg">Kg</option>
+      <option value="Metros Lineales">Metros Lineales</option>
+      <option value="Toneladas">Toneladas</option>
+    </select>
+  </div>
+
+  <!-- Espejos ocultos del ruteo SPG.
+       Los dos selects visibles (Categoria y Proyecto) siguen posteando a sus
+       campos PI2_* SIN CAMBIOS: HubSpot ya escribe ahi y no se toca. Estos dos
+       hidden llevan el valor equivalente a los campos que leen las reglas, y los
+       llena el script de abajo. Un input = un name, por eso hacen falta espejos.
+
+       NOTA DE MIGRACION: 00N5a00000C2213 es SubProducto__c, el campo COMPARTIDO
+       que las reglas leen hoy. Cuando se repunten los criterios a los campos
+       dedicados (script repuntar_criterios_spg.apex en el proyecto de Salesforce),
+       hay que cambiar este name a 00Ncb00000i3jQf (SPG_SubProducto__c) y el de
+       unidad de arriba a 00Ncb00000i3jQg (SPG_Unidad_De_Venta__c). -->
+  <input type="hidden" id="spg_segmento_hidden" name="00Ncb00000c0HEy" value="">
+  <input type="hidden" id="spg_subproducto_hidden" name="00N5a00000C2213" value="">
+
+  <div class="form-field" data-aos="fade-up" data-aos-delay="220">
     <label for="cuentanos">¡Cuéntanos de tu proyecto!</label>
     <textarea id="cuentanos" name="00NRp000000ewDP" rows="4" required></textarea>
   </div>
@@ -803,7 +853,71 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
   </div>
 
   <input type="submit" class="hs-button" value="Enviar" data-aos="fade-up" data-aos-delay="280">
+
+  <!-- Diagnostico de Web-to-Lead. Las fallas de Web-to-Lead son SILENCIOSAS: si el
+       insert se rechaza (por ejemplo un valor que no existe en un picklist
+       restringido) Salesforce no devuelve error, simplemente nunca crea el Lead.
+       Descomenta estas dos lineas para que en vez de redirigir muestre la pagina
+       de debug y mande el detalle por correo. Dejarlas comentadas en produccion.
+  <input type="hidden" name="debug" value="1">
+  <input type="hidden" name="debugEmail" value="ctellez@deacero.com">
+  -->
 </form>
+
+<script>
+/* ============================================================================
+ * Mapeo de la landing al ruteo SPG
+ * ============================================================================
+ * Traduce lo que el visitante elige en los selects visibles a los valores EXACTOS
+ * de los picklists de Salesforce que evaluan las reglas, y los deja en los inputs
+ * ocultos. Se traduce en vez de reusar el valor tal cual porque las etiquetas de
+ * la landing no coinciden con los API names: "Gaviones" contra "Gavion
+ * Galvanizado", "Parque industrial" contra "Parques Industriales". El motor
+ * compara con equalsIgnoreCase, asi que mayusculas y acentos no importan, pero
+ * las palabras si.
+ *
+ * Los selects visibles NO se tocan: siguen posteando a PI2_Producto_de_interes__c
+ * y PI2_Proyecto__c, que es donde escribe HubSpot.
+ * ========================================================================== */
+(function () {
+  var CATEGORIA_A_SUBPRODUCTO = {
+    'Gaviones':            'Gavión Galvanizado',
+    'Malla Ingenieria':    'Malla de Ingeniería',
+    'Torón de presfuerzo': 'Torón de Presfuerzo'
+  };
+
+  var PROYECTO_A_SEGMENTO = {
+    'Parque industrial':    'Parques Industriales',
+    'Edificación vertical': 'Edificación',
+    'Minería':              'Minería',
+    'Infraestructura':      'Infraestructura',
+    'Control de erosión':   'Control de Erosión',
+    'Otro':                 ''
+  };
+
+  var form        = document.getElementById('deacero-lead-form');
+  var categoria   = document.getElementById('categoria');
+  var proyecto    = document.getElementById('proyecto');
+  var subproducto = document.getElementById('spg_subproducto_hidden');
+  var segmento    = document.getElementById('spg_segmento_hidden');
+
+  if (!form || !categoria || !proyecto || !subproducto || !segmento) {
+    return;
+  }
+
+  function sincronizar() {
+    subproducto.value = CATEGORIA_A_SUBPRODUCTO[categoria.value] || '';
+    segmento.value    = PROYECTO_A_SEGMENTO[proyecto.value] || '';
+  }
+
+  categoria.addEventListener('change', sincronizar);
+  proyecto.addEventListener('change', sincronizar);
+  // Tambien al enviar, por si el navegador restauro valores sin disparar change.
+  form.addEventListener('submit', sincronizar);
+
+  sincronizar();
+})();
+</script>
 
 
 
