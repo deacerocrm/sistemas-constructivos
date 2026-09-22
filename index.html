@@ -709,9 +709,20 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
        Y actualiza tambien el oid, el Campaign_ID y los ids 00N, que cambian por org. -->
   <input type="hidden" name="oid" value="00Dcb00000EycJY">
   <input type="hidden" name="retURL" value="https://landing.deacero.com/sistemas-constructivos-gracias">
-  <!-- Lead.Company is required by Salesforce and not asked on this form; using a placeholder. Consider adding a real "Empresa" field instead. -->
-  <input type="hidden" name="company" value="Sin especificar">
+  <!-- Lead.Company ya NO viaja como placeholder: se pregunta en el formulario
+       (campo "Empresa" mas abajo). El cambio es lo que hace posible deduplicar la
+       Account al autoconvertir el Lead en Oportunidad; con el valor fijo anterior
+       ("Sin especificar") cada envio colgaba de una cuenta con ese mismo nombre. -->
   <input type="hidden" name="lead_source" value="Web">
+  <!-- Marcador de origen -> Lead.SPG_Origen_Landing__c (id 00Ncb00000lHGkF en vscodeOrg).
+       Es el UNICO disparador de la autoconversion a Oportunidad: el Flow
+       SPG_Autoconvertir_Lead_Landing filtra por este campo y nada mas. Ningun otro
+       proceso lo escribe, y por eso no se reutilizo PI2_Tipo_de_formulario__c, cuyo
+       valor "Sistemas Constructivos" comparten 701 leads de otros formularios desde
+       2020. Si se quita esta linea, los leads de esta landing dejan de convertirse
+       solos. El id 00N cambia por ambiente: al promover a UAT/PROD hay que volver a
+       consultarlo. -->
+  <input type="hidden" name="00Ncb00000lHGkF" value="1">
   <!-- Native Web-to-Lead reserved fields (no 00N id, no custom field needed): links the Lead to a Campaign and creates its CampaignMember. Both are required together — Campaign_ID alone does NOT create the association. Currently pointed at "Sistemas Constructivos - Landing Generica" in vscodeOrg (701cb000012Q8oRAAS); replace per environment/campaign variant. -->
   <input type="hidden" name="Campaign_ID" value="701cb000012Q8oRAAS">
   <input type="hidden" name="member_status" value="Responded">
@@ -728,6 +739,13 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
     <div class="form-field">
       <label for="lastname">Apellidos</label>
       <input type="text" id="lastname" name="last_name" required>
+    </div>
+  </div>
+
+  <div class="form-row" data-aos="fade-up" data-aos-delay="60">
+    <div class="form-field">
+      <label for="empresa">Empresa:</label>
+      <input type="text" id="empresa" name="company" required>
     </div>
   </div>
 
