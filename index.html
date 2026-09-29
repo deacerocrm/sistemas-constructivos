@@ -688,45 +688,44 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
 <!-- VERIFIED END-TO-END 2026-07-28 against vscodeOrg (sandbox): real Lead created, State/Country
      resolved via PI2_Lead_SetAddress, CampaignMember created. See README for the sandbox-vs-prod
      endpoint gotcha and the exact test evidence. -->
-<form action="https://deacero-2018--preprod2.sandbox.my.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST" class="hs-form stacked hs-custom-form" id="deacero-lead-form">
+<form action="https://deacero-2018.my.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST" class="hs-form stacked hs-custom-form" id="deacero-lead-form">
   <!-- EL ENDPOINT ES EL MY DOMAIN DEL ORG, no un host generico de Salesforce.
        Los endpoints genericos (webto.salesforce.com y test.salesforce.com) YA NO
        FUNCIONAN: devuelven "Lead Capture Page: Not available" y nunca crean el
-       Lead. Verificado el 2026-09-10 contra preprod2 -- el mismo POST fallo
-       contra test.salesforce.com y paso ("Your request has been queued") contra
-       este host. Esto reemplaza la instruccion anterior de este archivo y del
-       README, que decia justo lo contrario y quedo obsoleta por un cambio de
-       plataforma de Salesforce.
+       Lead. Verificado el 2026-09-10 contra preprod2.
 
-       El My Domain identifica al org, asi que el parametro orgId de la URL sobra;
-       el campo oculto oid de abajo SI se sigue requiriendo.
-
-       Por ambiente, cambiar el host por el My Domain correspondiente:
-         preprod2 : https://deacero-2018--preprod2.sandbox.my.salesforce.com
-         UAT      : https://deacero-2018--<sandbox>.sandbox.my.salesforce.com
-         PROD     : https://deacero-2018.my.salesforce.com
-       Sacalo con: sf org display --target-org <alias>  (campo instanceUrl).
-       Y actualiza tambien el oid, el Campaign_ID y los ids 00N, que cambian por org. -->
-  <input type="hidden" name="oid" value="00Dcb00000EycJY">
+       UNA SOLA PAGINA PARA TODOS LOS AMBIENTES. Lo que ves en el HTML es PROD, que
+       es lo que recibe cualquier visitante real. Para probar contra un sandbox se
+       agrega ?env= a la URL:
+         (sin parametro)   -> PROD
+         ?env=uat          -> UAT
+         ?env=preprod2     -> preprod2
+       El script "Seleccion de ambiente" al final del form reescribe el endpoint,
+       el oid, el Campaign_ID y los ids 00N que cambian por org. Los valores de
+       cada ambiente viven SOLO en ese script: si cambian, se actualizan ahi. -->
+  <input type="hidden" id="w2l_oid" name="oid" value="00D0b000000uX3F">
   <input type="hidden" name="retURL" value="https://landing.deacero.com/sistemas-constructivos-gracias">
   <!-- Lead.Company ya NO viaja como placeholder: se pregunta en el formulario
        (campo "Empresa" mas abajo). El cambio es lo que hace posible deduplicar la
        Account al autoconvertir el Lead en Oportunidad; con el valor fijo anterior
        ("Sin especificar") cada envio colgaba de una cuenta con ese mismo nombre. -->
   <input type="hidden" name="lead_source" value="Web">
-  <!-- Marcador de origen -> Lead.SPG_Origen_Landing__c (id 00Ncb00000lHGkF en vscodeOrg).
+  <!-- Marcador de origen -> Lead.SPG_Origen_Landing__c.
        Es el UNICO disparador de la autoconversion a Oportunidad: el Flow
        SPG_Autoconvertir_Lead_Landing filtra por este campo y nada mas. Ningun otro
        proceso lo escribe, y por eso no se reutilizo PI2_Tipo_de_formulario__c, cuyo
        valor "Sistemas Constructivos" comparten 701 leads de otros formularios desde
        2020. Si se quita esta linea, los leads de esta landing dejan de convertirse
-       solos. El id 00N cambia por ambiente: al promover a UAT/PROD hay que volver a
-       consultarlo. -->
-  <input type="hidden" name="00Ncb00000lHGkF" value="1">
-  <!-- Native Web-to-Lead reserved fields (no 00N id, no custom field needed): links the Lead to a Campaign and creates its CampaignMember. Both are required together — Campaign_ID alone does NOT create the association. Currently pointed at "Sistemas Constructivos - Landing Generica" in vscodeOrg (701cb000012Q8oRAAS); replace per environment/campaign variant. -->
-  <input type="hidden" name="Campaign_ID" value="701cb000012Q8oRAAS">
+       solos. Su id 00N cambia por ambiente: lo pone el script de ambiente. -->
+  <input type="hidden" id="w2l_origen" name="" value="1">
+  <!-- Native Web-to-Lead reserved fields (no 00N id, no custom field needed): links the Lead to a Campaign and creates its CampaignMember. Both are required together — Campaign_ID alone does NOT create the association. The Campaign id changes per org: set by the environment script. -->
+  <input type="hidden" id="w2l_campaign" name="Campaign_ID" value="">
   <input type="hidden" name="member_status" value="Responded">
-  <!-- Real Web-to-Lead field id for PI2_Tipo_de_formulario__c in vscodeOrg, confirmed via the org's own generated Web-to-Lead HTML -->
+  <!-- PI2_Tipo_de_formulario__c. Este id y los de PI2_Producto_de_interes__c,
+       PI2_Proyecto__c, PI2_Cuentanos_tu_Proyecto__c, SubProducto__c y
+       Unidad_De_Venta__c son IGUALES en preprod2 y PROD (verificado 2026-09-29):
+       los campos ya existian cuando se creo el sandbox. Solo los tres campos SPG
+       nuevos cambian de id por ambiente. -->
   <input type="hidden" name="00NRp000000ewDQ" value="Sistemas Constructivos">
   <!-- Standard Web-to-Lead fields (plain text, no 00N id). PI2_Country__c/PI2_State__c are lookups to CSPicklistData__c and can't be set directly via Web-to-Lead — the existing Flow PI2_Lead_SetAddress already resolves them automatically from these two standard text fields on every Lead insert/update, same as the org's other web forms. IMPORTANT: this value must reach Salesforce as real UTF-8 bytes (é) or the lookup silently fails to match — our page's <meta charset="utf-8"> already guarantees this for real browser submissions. -->
   <input type="hidden" name="country" value="México">
@@ -844,7 +843,8 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
        ============================================================================ -->
   <div class="form-field" data-aos="fade-up" data-aos-delay="200">
     <label for="spg_cantidad">Cantidad aproximada:</label>
-    <input type="number" id="spg_cantidad" name="00Ncb00000c0HEx" min="0" step="any"
+    <!-- SPG_Cantidad__c: su id 00N cambia por ambiente, lo pone el script de ambiente. -->
+    <input type="number" id="spg_cantidad" name="" min="0" step="any"
            placeholder="Solo el numero, ejemplo: 1.2" required>
   </div>
 
@@ -869,8 +869,11 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
        que las reglas leen hoy. Cuando se repunten los criterios a los campos
        dedicados (script repuntar_criterios_spg.apex en el proyecto de Salesforce),
        hay que cambiar este name a 00Ncb00000i3jQf (SPG_SubProducto__c) y el de
-       unidad de arriba a 00Ncb00000i3jQg (SPG_Unidad_De_Venta__c). -->
-  <input type="hidden" id="spg_segmento_hidden" name="00Ncb00000c0HEy" value="">
+       unidad de arriba a 00Ncb00000i3jQg (SPG_Unidad_De_Venta__c). Ojo: esos dos
+       ids son de preprod2; como son campos SPG nuevos, en otros ambientes cambian.
+
+       El name de spg_segmento_hidden (SPG_Segmento__c) lo pone el script de ambiente. -->
+  <input type="hidden" id="spg_segmento_hidden" name="" value="">
   <input type="hidden" id="spg_subproducto_hidden" name="00N5a00000C2213" value="">
 
   <div class="form-field" data-aos="fade-up" data-aos-delay="220">
@@ -896,6 +899,111 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
   <input type="hidden" name="debugEmail" value="ctellez@deacero.com">
   -->
 </form>
+
+<script>
+/* ============================================================================
+ * Seleccion de ambiente (una sola pagina para PROD, UAT y preprod2)
+ * ============================================================================
+ * Sin parametro la pagina manda a PROD. Con ?env=uat o ?env=preprod2 manda al
+ * sandbox y muestra un aviso arriba del formulario para que quien prueba sepa
+ * a donde esta enviando.
+ *
+ * Solo cambia lo que de verdad es distinto por org: el My Domain, el oid, la
+ * campana y los ids 00N de los tres campos SPG que se crearon despues del
+ * sandbox. Los demas 00N son iguales en todos los ambientes.
+ *
+ * Si el ?env= no existe o a su ambiente le falta un dato, el envio se BLOQUEA.
+ * Es a proposito: Web-to-Lead no avisa cuando algo sale mal, y un typo en la
+ * URL no debe mandar datos de prueba a PROD ni prospectos reales a un sandbox.
+ * Para sacar los valores de un ambiente:
+ *   sf org display --target-org <alias>                         (instanceUrl, id)
+ *   sf data query --use-tooling-api --target-org <alias> --query
+ *     "SELECT Id, DeveloperName FROM CustomField WHERE TableEnumOrId = 'Lead'
+ *      AND DeveloperName IN ('SPG_Origen_Landing','SPG_Cantidad','SPG_Segmento')"
+ *   (el 00N es el Id recortado a 15 caracteres)
+ * ========================================================================== */
+(function () {
+  var AMBIENTES = {
+    prod: {
+      nombre:   'PROD',
+      host:     'https://deacero-2018.my.salesforce.com',
+      oid:      '00D0b000000uX3F',
+      campana:  '',   // PENDIENTE: campana "Sistemas Constructivos - Landing Generica" en PROD
+      origen:   '',   // PENDIENTE: 00N de SPG_Origen_Landing__c tras el deploy a PROD
+      cantidad: '',   // PENDIENTE: 00N de SPG_Cantidad__c tras el deploy a PROD
+      segmento: ''    // PENDIENTE: 00N de SPG_Segmento__c tras el deploy a PROD
+    },
+    uat: {
+      nombre:   'UAT',
+      host:     'https://deacero-2018--uatpreprod.sandbox.my.salesforce.com',
+      oid:      '00Dcb000001lLYP',
+      campana:  '',   // UAT no tiene todavia los componentes del ticket 36
+      origen:   '',
+      cantidad: '',
+      segmento: ''
+    },
+    preprod2: {
+      nombre:   'preprod2',
+      host:     'https://deacero-2018--preprod2.sandbox.my.salesforce.com',
+      oid:      '00Dcb00000EycJY',
+      campana:  '701cb000012Q8oRAAS',
+      origen:   '00Ncb00000lHGkF',
+      cantidad: '00Ncb00000c0HEx',
+      segmento: '00Ncb00000c0HEy'
+    }
+  };
+
+  var form = document.getElementById('deacero-lead-form');
+  if (!form) {
+    return;
+  }
+
+  var clave = 'prod';
+  try {
+    clave = (new URLSearchParams(window.location.search).get('env') || 'prod').toLowerCase();
+  } catch (e) {
+    clave = 'prod';
+  }
+  var amb = AMBIENTES[clave];
+
+  var faltantes = [];
+  if (!amb) {
+    faltantes.push('el ambiente "' + clave + '" no existe (usa uat o preprod2)');
+  } else {
+    ['host', 'oid', 'campana', 'origen', 'cantidad', 'segmento'].forEach(function (k) {
+      if (!amb[k]) { faltantes.push(k); }
+    });
+  }
+
+  if (faltantes.length) {
+    // Bloquea el envio: mejor un formulario que no manda a uno que manda al lugar equivocado.
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      window.alert('El formulario no esta disponible en este momento. Intenta mas tarde.');
+    });
+    if (window.console) {
+      console.error('[landing] Envio bloqueado. Configuracion incompleta: ' + faltantes.join(', '));
+    }
+    return;
+  }
+
+  form.action = amb.host + '/servlet/servlet.WebToLead?encoding=UTF-8';
+  document.getElementById('w2l_oid').value      = amb.oid;
+  document.getElementById('w2l_campaign').value = amb.campana;
+  document.getElementById('w2l_origen').name    = amb.origen;
+  document.getElementById('spg_cantidad').name  = amb.cantidad;
+  document.getElementById('spg_segmento_hidden').name = amb.segmento;
+
+  if (clave !== 'prod') {
+    var aviso = document.createElement('div');
+    aviso.textContent = 'AMBIENTE DE PRUEBAS: este formulario envia a ' + amb.nombre + ', no a produccion.';
+    aviso.setAttribute('role', 'status');
+    aviso.style.cssText = 'background:#fff3cd;color:#664d03;border:1px solid #ffcd39;' +
+      'padding:10px 12px;margin:0 0 16px;border-radius:4px;font-weight:600;';
+    form.insertBefore(aviso, form.firstChild);
+  }
+})();
+</script>
 
 <script>
 /* ============================================================================
