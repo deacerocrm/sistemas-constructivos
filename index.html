@@ -837,9 +837,11 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
        La unidad es criterio por si misma, no una etiqueta: el mismo producto tiene
        umbrales distintos segun la unidad (Malla de Ingenieria enruta desde 1500
        Metros Lineales en Edificacion pero desde 200 Piezas en Prefabricados).
-       Solo se ofrecen las 4 unidades que las reglas de SPG evaluan; las otras dos
-       del picklist (Metros Cuadrados, Metros Cubicos) no tienen regla y serian un
-       callejon sin salida.
+       Se ofrecen las 4 unidades del picklist de PROD. Las reglas SPG solo evaluan
+       Piezas y Toneladas; con Metros Cuadrados o Cubicos ninguna regla aplica y el
+       Lead cae con el dueno por defecto de la regla estandar (Gabriela Rodriguez),
+       pero NO se pierde. Las reglas que piden Kg o Metros Lineales no pueden
+       cumplirse en PROD porque esos valores no existen ahi.
        ============================================================================ -->
   <div class="form-field" data-aos="fade-up" data-aos-delay="200">
     <label for="spg_cantidad">Cantidad aproximada:</label>
@@ -852,10 +854,14 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
     <label for="spg_unidad">Unidad de venta:</label>
     <select id="spg_unidad" name="00NRp000000cfTZ" required>
       <option value="">Selecciona una opción</option>
+      <!-- Solo los 4 valores que existen en PROD (Unidad_De_Venta__c es restringido).
+           "Kg" y "Metros Lineales" existen en preprod2 pero NO en PROD: si se mandan,
+           Web-to-Lead rechaza el Lead sin avisar y el visitante igual ve la pagina de
+           gracias. No agregar valores aqui sin confirmar antes que existen en PROD. -->
       <option value="Piezas">Piezas</option>
-      <option value="Kg">Kg</option>
-      <option value="Metros Lineales">Metros Lineales</option>
       <option value="Toneladas">Toneladas</option>
+      <option value="Metros Cuadrados">Metros Cuadrados</option>
+      <option value="Metros Cubicos">Metros Cúbicos</option>
     </select>
   </div>
 
