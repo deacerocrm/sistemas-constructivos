@@ -935,6 +935,7 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
       host:     'https://deacero-2018.my.salesforce.com',
       oid:      '00D0b000000uX3F',
       campana:  '701Rp00000xkt2qIAA',   // "Sistemas Constructivos - Landing Generica" (creada en PROD 2026-09-29)
+      codigos:  {},
       origen:   '00NRp0000071CWC',   // SPG_Origen_Landing__c (verificado en PROD 2026-09-29)
       cantidad: '00NRp0000071CWB',   // SPG_Cantidad__c
       segmento: '00NRp0000071CWD'    // SPG_Segmento__c
@@ -944,6 +945,7 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
       host:     'https://deacero-2018--uatpreprod.sandbox.my.salesforce.com',
       oid:      '00Dcb000001lLYP',
       campana:  '',   // UAT no tiene todavia los componentes del ticket 36
+      codigos:  {},
       origen:   '',
       cantidad: '',
       segmento: ''
@@ -953,11 +955,45 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
       host:     'https://deacero-2018--preprod2.sandbox.my.salesforce.com',
       oid:      '00Dcb00000EycJY',
       campana:  '701cb000012Q8oRAAS',
+      codigos:  {
+        v7trs6: '701cb00001Mvsg1AAB',
+        '4pbrzt': '701cb00001MtCCDAA3',
+        rua5qj: '701cb00001MqqzbAAB'
+      },
       origen:   '00Ncb00000lHGkF',
       cantidad: '00Ncb00000c0HEx',
       segmento: '00Ncb00000c0HEy'
     }
   };
+
+  /* Codigo de QR (?r=). Cada QR impreso lleva un codigo opaco que aqui se
+   * traduce a su campana hija; la campana del ambiente es la padre y recibe todo
+   * lo que llega sin codigo o con un codigo desconocido, asi que ningun prospecto
+   * se pierde. Los codigos NO se borran de la lista aunque la campana termine:
+   * siguen impresos. Que canal es cada codigo vive solo en Salesforce
+   * (Campaign.Landing_URL__c), nunca en esta pagina publica.
+   * El codigo se guarda en sessionStorage y se quita de la barra de direcciones,
+   * para que no quede a la vista ni se pierda si el visitante recarga. */
+  function campanaPorCodigo(amb) {
+    var codigo = '';
+    try {
+      var params = new URLSearchParams(window.location.search);
+      codigo = (params.get('r') || '').toLowerCase();
+      if (codigo) {
+        try { sessionStorage.setItem('landing_r', codigo); } catch (e) { /* sin storage: solo esta carga */ }
+        params.delete('r');
+        var resto = params.toString();
+        history.replaceState(null, '', window.location.pathname + (resto ? '?' + resto : '') + window.location.hash);
+      } else {
+        try { codigo = sessionStorage.getItem('landing_r') || ''; } catch (e) { codigo = ''; }
+      }
+    } catch (e) {
+      codigo = '';
+    }
+    // hasOwnProperty: un ?r=constructor no debe devolver algo del prototipo.
+    var codigos = amb.codigos || {};
+    return Object.prototype.hasOwnProperty.call(codigos, codigo) ? codigos[codigo] : amb.campana;
+  }
 
   var form = document.getElementById('deacero-lead-form');
   if (!form) {
@@ -995,7 +1031,7 @@ _hsp.push(['addPrivacyConsentListener', function(consent){
 
   form.action = amb.host + '/servlet/servlet.WebToLead?encoding=UTF-8';
   document.getElementById('w2l_oid').value      = amb.oid;
-  document.getElementById('w2l_campaign').value = amb.campana;
+  document.getElementById('w2l_campaign').value = campanaPorCodigo(amb);
   document.getElementById('w2l_origen').name    = amb.origen;
   document.getElementById('spg_cantidad').name  = amb.cantidad;
   document.getElementById('spg_segmento_hidden').name = amb.segmento;
