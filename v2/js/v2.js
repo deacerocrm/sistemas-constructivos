@@ -57,10 +57,18 @@
     });
   }
 
+  /* Reinicia una animacion CSS aunque la clase ya estuviera puesta. */
+  function animar(nodo, clase) {
+    nodo.classList.remove(clase);
+    void nodo.offsetWidth;
+    nodo.classList.add(clase);
+  }
+
   function pintarMenu(seg) {
     menu.innerHTML = '';
-    seg.productos.forEach(function (key) {
+    seg.productos.forEach(function (key, i) {
       var b = el('button', 'producto-link', productos[key].nombre.replace('®', ''));
+      b.style.animationDelay = (i * 45) + 'ms';
       b.type = 'button';
       b.setAttribute('aria-pressed', key === actual.producto ? 'true' : 'false');
       b.addEventListener('click', function () {
@@ -91,6 +99,7 @@
     var i = 0;
     function mostrar(n) {
       i = (n + p.galeria.length) % p.galeria.length;
+      animar(img, 'img-entrando');
       img.src = 'img/' + p.galeria[i].img + '.jpg';
       img.alt = p.galeria[i].nombre;
       cap.textContent = p.galeria[i].nombre + ' (' + (i + 1) + ' de ' + p.galeria.length + ')';
@@ -138,11 +147,13 @@
     ficha.appendChild(texto);
     ficha.appendChild(media);
     ficha.setAttribute('aria-labelledby', 'tab-' + seg.id);
+    animar(ficha, 'entrando');
   }
 
   function seleccionar(segId, key) {
     var seg = porId(segId);
     if (!seg) { return; }
+    if (segId !== actual.segmento) { animar(menu, 'menu-entrando'); }
     actual.segmento = segId;
     actual.producto = key;
     Array.prototype.forEach.call(tabs.children, function (b) {
@@ -179,6 +190,7 @@
       categoria.appendChild(new Option(p.nombre, p.interes));
     });
     categoria.disabled = false;
+    animar(categoria, 'campo-resaltado');
     // Conserva el producto si existe en el nuevo segmento.
     categoria.value = previa;
     if (categoria.value !== previa) { categoria.value = ''; }
@@ -206,6 +218,7 @@
     pintarCategorias();
     categoria.value = productos[key].interes;
     sincronizar();
+    animar(document.querySelector('.form-card'), 'form-resaltado');
     document.getElementById('contacto').scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(function () { document.getElementById('firstname').focus({ preventScroll: true }); }, 450);
   }
