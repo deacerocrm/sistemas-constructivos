@@ -218,7 +218,9 @@
     pintarCategorias();
     categoria.value = productos[key].interes;
     sincronizar();
-    animar(document.querySelector('.form-card'), 'form-resaltado');
+    // Destella los dos campos que se llenaron solos para que el visitante lo note.
+    animar(proyecto, 'campo-autollenado');
+    animar(categoria, 'campo-autollenado');
     document.getElementById('contacto').scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(function () { document.getElementById('firstname').focus({ preventScroll: true }); }, 450);
   }
