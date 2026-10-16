@@ -7,13 +7,18 @@
 <meta name="description" content="Aceros de refuerzo DEACERO para edificación, parques industriales, prefabricados, infraestructura, control de erosión, vialidades y energía, y minería.">
 <link rel="icon" type="image/png" href="../images/favicon-32x32.png">
 <link rel="stylesheet" href="css/v2.css">
+<!-- Vista de prueba: que no la indexen los buscadores. QUITAR al promover. -->
+<meta name="robots" content="noindex, nofollow">
 </head>
 <body>
+
+<!-- Franja de vista de prueba. QUITAR al promover. -->
+<div class="franja-prueba" role="note">VISTA DE PRUEBA · Rediseño en revisión, no es la página oficial</div>
 
 <!-- ============================================================================
      REDISENO CSA-286 (2026-10-16) — version en revision
      ============================================================================
-     Esta pagina vive en /v2/ mientras negocio la revisa. La pagina actual
+     Esta pagina vive en /v2-prueba/ mientras negocio la revisa. La pagina actual
      (../index.html) y los QR impresos que apuntan a ella NO cambian.
      Al aprobarla se reemplaza el index de la raiz y se cambia AMBIENTE_POR_DEFECTO
      a 'prod' (script "Seleccion de ambiente", abajo). Rollback: git revert.
@@ -221,7 +226,7 @@
 /* ============================================================================
  * Seleccion de ambiente — igual que ../index.html salvo AMBIENTE_POR_DEFECTO.
  * ============================================================================
- * Mientras /v2/ esta en revision, sin ?env= manda a preprod2 (los valores nuevos
+ * Mientras /v2-prueba/ esta en revision, sin ?env= manda a preprod2 (los valores nuevos
  * de los picklists todavia no existen en PROD). AL PROMOVER: cambiar a 'prod'.
  * Con ?env=prod / ?env=uat / ?env=preprod2 se fuerza el ambiente.
  * Si el ambiente no existe o le falta un dato, el envio se BLOQUEA a proposito.
