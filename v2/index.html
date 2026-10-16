@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aceros de Refuerzo | DEACERO Sistemas Constructivos</title>
+<meta name="description" content="Aceros de refuerzo DEACERO para edificación, parques industriales, prefabricados, infraestructura, control de erosión, vialidades y energía, y minería.">
+<link rel="icon" type="image/png" href="../images/favicon-32x32.png">
+<link rel="stylesheet" href="css/v2.css">
+</head>
+<body>
+
+<!-- ============================================================================
+     REDISENO CSA-286 (2026-10-16) — version en revision
+     ============================================================================
+     Esta pagina vive en /v2/ mientras negocio la revisa. La pagina actual
+     (../index.html) y los QR impresos que apuntan a ella NO cambian.
+     Al aprobarla se reemplaza el index de la raiz y se cambia AMBIENTE_POR_DEFECTO
+     a 'prod' (script "Seleccion de ambiente", abajo). Rollback: git revert.
+     ========================================================================== -->
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="./" class="topbar-logo"><img src="../images/DEACERO Inteligencia Industrial_Blanco.png" alt="DEACERO Inteligencia Industrial" width="191" height="85"></a>
+  </div>
+</header>
+
+<section class="hero" id="contacto">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1>ACEROS DE REFUERZO</h1>
+      <img class="hero-logo" src="../images/DEACERO Inteligencia Industrial_Blanco.png" alt="DEACERO Inteligencia Industrial" width="191" height="85">
+      <p>Soluciones para fortalecer tus proyectos de construcción con cimientos sólidos y duraderos.</p>
+      <span class="hero-bar" aria-hidden="true"></span>
+    </div>
+
+    <div class="form-card">
+<form action="https://deacero-2018.my.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST" id="deacero-lead-form">
+  <!-- EL ENDPOINT ES EL MY DOMAIN DEL ORG (los hosts genericos de Web-to-Lead ya no
+       funcionan, ver README). El script "Seleccion de ambiente" reescribe endpoint,
+       oid, campana y los 00N que cambian por org. Todo lo oculto de aqui abajo es
+       IGUAL que en ../index.html; ver ahi los comentarios completos de cada campo. -->
+  <input type="hidden" id="w2l_oid" name="oid" value="00D0b000000uX3F">
+  <input type="hidden" name="retURL" value="https://landing.deacero.com/sistemas-constructivos-gracias">
+  <input type="hidden" name="lead_source" value="Campañas">
+  <!-- SPG_Origen_Landing__c: UNICO disparador de la autoconversion a Oportunidad. -->
+  <input type="hidden" id="w2l_origen" name="" value="1">
+  <input type="hidden" id="w2l_campaign" name="Campaign_ID" value="">
+  <input type="hidden" name="member_status" value="Responded">
+  <!-- PI2_Tipo_de_formulario__c -->
+  <input type="hidden" name="00NRp000000ewDQ" value="Sistemas Constructivos">
+  <input type="hidden" name="country" value="México">
+
+  <div class="form-row">
+    <div class="form-field">
+      <label for="firstname">Nombre</label>
+      <input type="text" id="firstname" name="first_name" autocomplete="given-name" required>
+    </div>
+    <div class="form-field">
+      <label for="lastname">Apellidos</label>
+      <input type="text" id="lastname" name="last_name" autocomplete="family-name" required>
+    </div>
+  </div>
+
+  <div class="form-field">
+    <label for="empresa">Empresa:</label>
+    <input type="text" id="empresa" name="company" autocomplete="organization" required>
+  </div>
+
+  <div class="form-row">
+    <div class="form-field">
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="email" placeholder="Ejemplo: usuario@ejemplo.com.mx" autocomplete="email" required>
+    </div>
+    <div class="form-field">
+      <label for="phone">Número de teléfono:</label>
+      <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-field">
+      <label for="estado">Estado:</label>
+      <select id="estado" name="state" required>
+        <option value="">Selecciona tu estado</option>
+        <option value="AGUASCALIENTES">Aguascalientes</option>
+        <option value="BAJA CALIFORNIA">Baja California</option>
+        <option value="BAJA CALIFORNIA SUR">Baja California Sur</option>
+        <option value="CAMPECHE">Campeche</option>
+        <option value="COAHUILA">Coahuila</option>
+        <option value="COLIMA">Colima</option>
+        <option value="CHIAPAS">Chiapas</option>
+        <option value="CHIHUAHUA">Chihuahua</option>
+        <option value="CIUDAD DE MEXICO">Ciudad de México</option>
+        <option value="DURANGO">Durango</option>
+        <option value="GUANAJUATO">Guanajuato</option>
+        <option value="GUERRERO">Guerrero</option>
+        <option value="HIDALGO">Hidalgo</option>
+        <option value="JALISCO">Jalisco</option>
+        <option value="MEXICO">México (Estado)</option>
+        <option value="MICHOACAN">Michoacán</option>
+        <option value="MORELOS">Morelos</option>
+        <option value="NAYARIT">Nayarit</option>
+        <option value="NUEVO LEON">Nuevo León</option>
+        <option value="OAXACA">Oaxaca</option>
+        <option value="PUEBLA">Puebla</option>
+        <option value="QUERETARO">Querétaro</option>
+        <option value="QUINTANA ROO">Quintana Roo</option>
+        <option value="SAN LUIS POTOSI">San Luis Potosí</option>
+        <option value="SINALOA">Sinaloa</option>
+        <option value="SONORA">Sonora</option>
+        <option value="TABASCO">Tabasco</option>
+        <option value="TAMAULIPAS">Tamaulipas</option>
+        <option value="TLAXCALA">Tlaxcala</option>
+        <option value="VERACRUZ">Veracruz</option>
+        <option value="YUCATAN">Yucatán</option>
+        <option value="ZACATECAS">Zacatecas</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <!-- PI2_Proyecto__c (restringido). El value es el valor EXACTO del picklist;
+           la etiqueta es el nombre del segmento. Prefabricados y "Vialidades y
+           Energía" son valores NUEVOS: deben existir en el org antes de mandar
+           prospectos ahi o Web-to-Lead los descarta sin avisar. Las opciones las
+           llena el script del catalogo (abajo) para que sigan el mismo orden que
+           las pestanas de la seccion Proyectos. -->
+      <label for="proyecto">Proyecto:</label>
+      <select id="proyecto" name="00NRp000000ewDS" required>
+        <option value="">Selecciona una opción</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-field">
+    <!-- PI2_Producto_de_interes__c (restringido). Se filtra por el proyecto
+         elegido. Varilla Grado 42, Malla Triple Nudo y Malla Nudo Fijo son valores
+         NUEVOS del picklist (ver comentario de arriba). -->
+    <label for="categoria">Categoría:</label>
+    <select id="categoria" name="00NRp000000ewDR" required disabled>
+      <option value="">Primero elige el proyecto</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <div class="form-field">
+      <!-- SPG_Cantidad__c: su id 00N lo pone el script de ambiente. -->
+      <label for="spg_cantidad">Cantidad aproximada:</label>
+      <input type="number" id="spg_cantidad" name="" min="0" step="any" placeholder="Solo el número, ejemplo: 1.2" required>
+    </div>
+    <div class="form-field">
+      <!-- Unidad_De_Venta__c (restringido). "Kg" es valor NUEVO en PROD: existe en
+           preprod2 pero hay que agregarlo en PROD (solo a los tipos de prospecto de
+           la landing) ANTES de promover esta pagina. -->
+      <label for="spg_unidad">Unidad de venta:</label>
+      <select id="spg_unidad" name="00NRp000000cfTZ" required>
+        <option value="">Selecciona una opción</option>
+        <option value="Kg">Kg</option>
+        <option value="Metros Cuadrados">Metros cuadrados</option>
+        <option value="Metros Cubicos">Metros cúbicos</option>
+        <option value="Toneladas">Toneladas</option>
+        <option value="Piezas">Piezas</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Espejos ocultos del ruteo SPG (SPG_Segmento__c y SubProducto__c). Los llena
+       el script del catalogo a partir de Proyecto y Categoria. -->
+  <input type="hidden" id="spg_segmento_hidden" name="" value="">
+  <input type="hidden" id="spg_subproducto_hidden" name="00N5a00000C2213" value="">
+
+  <div class="form-field">
+    <label for="cuentanos">¡Cuéntanos de tu proyecto!</label>
+    <textarea id="cuentanos" name="00NRp000000ewDP" rows="3" required></textarea>
+  </div>
+
+  <label class="privacidad">
+    <input type="checkbox" id="privacidad" required>
+    <span>He leído y acepto el <a href="https://www.deacero.com/aviso-de-privacidad" target="_blank" rel="noopener">Aviso de privacidad</a></span>
+  </label>
+
+  <button type="submit" class="btn-enviar">Enviar</button>
+
+  <!-- Diagnostico de Web-to-Lead (fallas silenciosas). Dejar comentado en produccion.
+  <input type="hidden" name="debug" value="1">
+  <input type="hidden" name="debugEmail" value="ctellez@deacero.com">
+  -->
+</form>
+    </div>
+  </div>
+</section>
+
+<section class="proyectos" id="proyectos">
+  <h2 class="proyectos-title">Proyectos</h2>
+  <div class="tabs" role="tablist" aria-label="Segmentos" id="tabs-segmentos"></div>
+  <div class="segmento">
+    <nav class="productos-menu" aria-label="Productos del segmento" id="menu-productos"></nav>
+    <article class="producto" id="producto" aria-live="polite"></article>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <img src="../images/DEACERO Inteligencia Industrial_Blanco.png" alt="DEACERO Inteligencia Industrial" width="230" height="103" loading="lazy">
+    <div class="redes">
+      <p>Síguenos en redes:</p>
+      <!-- PENDIENTE CSA-286: ligas oficiales de redes sociales (las debe pasar negocio). -->
+      <ul>
+        <li><a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z"/></svg></a></li>
+        <li><a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.3A4.7 4.7 0 1 0 12 16.7 4.7 4.7 0 0 0 12 7.3zm0 7.7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm4.9-8.9a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2zM20.9 7.1c-.1-1.5-.4-2.8-1.5-3.9S17 1.7 15.5 1.6C14 1.5 10 1.5 8.5 1.6 7 1.7 5.7 2 4.6 3.1S3.1 5.6 3 7.1c-.1 1.5-.1 5.5 0 7 .1 1.5.4 2.8 1.5 3.9s2.4 1.4 3.9 1.5c1.5.1 5.5.1 7 0 1.5-.1 2.8-.4 3.9-1.5s1.4-2.4 1.5-3.9c.2-1.5.2-5.5.1-7zm-2 8.6a3 3 0 0 1-1.7 1.7c-1.2.5-4 .4-5.2.4s-4 .1-5.2-.4a3 3 0 0 1-1.7-1.7c-.5-1.2-.4-4-.4-5.2s-.1-4 .4-5.2A3 3 0 0 1 6.8 3.6C8 3.1 10.8 3.2 12 3.2s4-.1 5.2.4a3 3 0 0 1 1.7 1.7c.5 1.2.4 4 .4 5.2s.1 4-.4 5.2z"/></svg></a></li>
+        <li><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.9 20.5H3.4V9h3.5v11.5zM5.2 7.4a2 2 0 1 1 0-4.1 2 2 0 0 1 0 4.1zm15.3 13.1H17v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.5V9h3.3v1.6h.1c.5-.9 1.6-1.9 3.4-1.9 3.6 0 4.2 2.4 4.2 5.4v6.4z"/></svg></a></li>
+        <li><a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.6 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .4-3.8 31 31 0 0 0-.4-3.8zM9.9 14.9V9.1l5 2.9-5 2.9z"/></svg></a></li>
+        <li><a href="#" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7 8 10.3h-6.2l-4.9-6.3L5.4 21H2.3l7.2-8.3L1.9 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z"/></svg></a></li>
+        <li><a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.7 5.7 0 1 0 4.9 5.7V9a7.4 7.4 0 0 0 4.3 1.4V7.3a4.3 4.3 0 0 1-3.2-1.5z"/></svg></a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="js/catalogo.js"></script>
+<script>
+/* ============================================================================
+ * Seleccion de ambiente — igual que ../index.html salvo AMBIENTE_POR_DEFECTO.
+ * ============================================================================
+ * Mientras /v2/ esta en revision, sin ?env= manda a preprod2 (los valores nuevos
+ * de los picklists todavia no existen en PROD). AL PROMOVER: cambiar a 'prod'.
+ * Con ?env=prod / ?env=uat / ?env=preprod2 se fuerza el ambiente.
+ * Si el ambiente no existe o le falta un dato, el envio se BLOQUEA a proposito.
+ * ========================================================================== */
+(function () {
+  var AMBIENTE_POR_DEFECTO = 'preprod2';
+  var AMBIENTES = {
+    prod: {
+      nombre:   'PROD',
+      host:     'https://deacero-2018.my.salesforce.com',
+      oid:      '00D0b000000uX3F',
+      campana:  '701Rp00000xkt2qIAA',   // "Sistemas Constructivos - Landing Generica"
+      codigos:  {
+        v7trs6: '701Rp00000yDT02IAG',
+        '4pbrzt': '701Rp00000yDv4MIAS',
+        rua5qj: '701Rp00000yDX5GIAW'
+      },
+      origen:   '00NRp0000071CWC',   // SPG_Origen_Landing__c
+      cantidad: '00NRp0000071CWB',   // SPG_Cantidad__c
+      segmento: '00NRp0000071CWD'    // SPG_Segmento__c
+    },
+    uat: {
+      nombre:   'UAT',
+      host:     'https://deacero-2018--uatpreprod.sandbox.my.salesforce.com',
+      oid:      '00Dcb000001lLYP',
+      campana:  '',
+      codigos:  {},
+      origen:   '',
+      cantidad: '',
+      segmento: ''
+    },
+    preprod2: {
+      nombre:   'preprod2',
+      host:     'https://deacero-2018--preprod2.sandbox.my.salesforce.com',
+      oid:      '00Dcb00000EycJY',
+      campana:  '701cb000012Q8oRAAS',
+      codigos:  {
+        v7trs6: '701cb00001Mvsg1AAB',
+        '4pbrzt': '701cb00001MtCCDAA3',
+        rua5qj: '701cb00001MqqzbAAB'
+      },
+      origen:   '00Ncb00000lHGkF',
+      cantidad: '00Ncb00000c0HEx',
+      segmento: '00Ncb00000c0HEy'
+    }
+  };
+  /* Codigo de QR (?r=): se traduce a su campana hija; sin codigo o con uno
+   * desconocido cae en la campana padre. Ver ../index.html. */
+  function campanaPorCodigo(amb) {
+    var codigo = '';
+    try {
+      var params = new URLSearchParams(window.location.search);
+      codigo = (params.get('r') || '').toLowerCase();
+      if (codigo) {
+        try { sessionStorage.setItem('landing_r', codigo); } catch (e) { /* sin storage: solo esta carga */ }
+        params.delete('r');
+        var resto = params.toString();
+        history.replaceState(null, '', window.location.pathname + (resto ? '?' + resto : '') + window.location.hash);
+      } else {
+        try { codigo = sessionStorage.getItem('landing_r') || ''; } catch (e) { codigo = ''; }
+      }
+    } catch (e) {
+      codigo = '';
+    }
+    var codigos = amb.codigos || {};
+    return Object.prototype.hasOwnProperty.call(codigos, codigo) ? codigos[codigo] : amb.campana;
+  }
+
+  var form = document.getElementById('deacero-lead-form');
+  if (!form) {
+    return;
+  }
+  var clave = AMBIENTE_POR_DEFECTO;
+  try {
+    clave = (new URLSearchParams(window.location.search).get('env') || AMBIENTE_POR_DEFECTO).toLowerCase();
+  } catch (e) {
+    clave = AMBIENTE_POR_DEFECTO;
+  }
+  var amb = AMBIENTES[clave];
+  var faltantes = [];
+  if (!amb) {
+    faltantes.push('el ambiente "' + clave + '" no existe (usa prod, uat o preprod2)');
+  } else {
+    ['host', 'oid', 'campana', 'origen', 'cantidad', 'segmento'].forEach(function (k) {
+      if (!amb[k]) { faltantes.push(k); }
+    });
+  }
+  if (faltantes.length) {
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      window.alert('El formulario no esta disponible en este momento. Intenta mas tarde.');
+    });
+    if (window.console) {
+      console.error('[landing] Envio bloqueado. Configuracion incompleta: ' + faltantes.join(', '));
+    }
+    return;
+  }
+  form.action = amb.host + '/servlet/servlet.WebToLead?encoding=UTF-8';
+  document.getElementById('w2l_oid').value      = amb.oid;
+  document.getElementById('w2l_campaign').value = campanaPorCodigo(amb);
+  document.getElementById('w2l_origen').name    = amb.origen;
+  document.getElementById('spg_cantidad').name  = amb.cantidad;
+  document.getElementById('spg_segmento_hidden').name = amb.segmento;
+  if (clave !== 'prod') {
+    var aviso = document.createElement('div');
+    aviso.className = 'aviso-ambiente';
+    aviso.textContent = 'AMBIENTE DE PRUEBAS: este formulario envía a ' + amb.nombre + ', no a producción.';
+    aviso.setAttribute('role', 'status');
+    form.insertBefore(aviso, form.firstChild);
+  }
+})();
+</script>
+<script src="js/v2.js"></script>
+</body>
+</html>
