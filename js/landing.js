@@ -221,8 +221,13 @@
     // Destella los dos campos que se llenaron solos para que el visitante lo note.
     animar(proyecto, 'campo-autollenado');
     animar(categoria, 'campo-autollenado');
-    document.getElementById('contacto').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setTimeout(function () { document.getElementById('firstname').focus({ preventScroll: true }); }, 450);
+    // En celular el formulario va debajo del titulo: se baja directo a la tarjeta.
+    document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Solo con mouse se pone el cursor en Nombre; en pantalla tactil abriria el
+    // teclado de golpe y taparia los campos que se acaban de llenar.
+    if (window.matchMedia && window.matchMedia('(pointer: fine)').matches) {
+      setTimeout(function () { document.getElementById('firstname').focus({ preventScroll: true }); }, 450);
+    }
   }
 
   if (!tabs || !menu || !ficha || !form || !proyecto || !categoria || !segHidden || !subHidden) {

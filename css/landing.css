@@ -96,7 +96,8 @@ img { max-width: 100%; height: auto; display: block; }
 #deacero-lead-form textarea {
   width: 100%;
   font: inherit;
-  font-size: 15px;
+  font-size: 16px; /* 16px o mas: con menos, Safari en iPhone hace zoom al tocar el campo */
+  min-height: 46px;
   color: #1d2433;
   background-color: var(--blanco);
   border: 1.5px solid var(--borde);
@@ -124,14 +125,16 @@ img { max-width: 100%; height: auto; display: block; }
 }
 #deacero-lead-form .privacidad {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 14px;
   line-height: 1.35;
   margin: 0;
+  cursor: pointer;
 }
-#deacero-lead-form .privacidad input { width: 18px; height: 18px; margin: 0; flex: 0 0 auto; accent-color: var(--azul); }
-#deacero-lead-form .privacidad a { color: var(--azul); }
+#deacero-lead-form .privacidad input { width: 22px; height: 22px; margin: 0; flex: 0 0 auto; accent-color: var(--azul); cursor: pointer; }
+#deacero-lead-form .privacidad a { color: var(--azul); padding: 8px 0; } /* inline: no parte la frase; el padding agranda el area de toque */
 .btn-enviar {
   align-self: flex-start;
   font: inherit;
@@ -141,6 +144,7 @@ img { max-width: 100%; height: auto; display: block; }
   background: var(--azul);
   border: 0;
   border-radius: 999px;
+  min-height: 46px;
   padding: 11px 40px;
   cursor: pointer;
   transition: background .2s ease, transform .15s ease;
@@ -187,6 +191,7 @@ img { max-width: 100%; height: auto; display: block; }
   background: transparent;
   border: 0;
   border-left: 1.5px solid rgba(255, 255, 255, .85);
+  min-height: 44px;
   padding: 8px 14px;
   line-height: 1.15;
   cursor: pointer;
@@ -257,6 +262,7 @@ img { max-width: 100%; height: auto; display: block; }
   background: var(--naranja);
   border: 0;
   border-radius: 999px;
+  min-height: 46px;
   padding: 12px 30px;
   cursor: pointer;
 }
@@ -346,19 +352,91 @@ img { max-width: 100%; height: auto; display: block; }
 @media (max-width: 1024px) {
   .hero-grid { grid-template-columns: 1fr; }
   .hero-copy { max-width: none; }
-  .producto { grid-template-columns: 1fr; padding: 32px 28px 48px; }
-  .producto-media { order: -1; max-width: 520px; }
+  .producto { padding: 32px 28px 48px; }
+  /* Pestanas en chips que se acomodan en varias filas: se ven los 7 proyectos sin
+     tener que adivinar que hay mas a la derecha. */
+  .tabs { flex-wrap: wrap; justify-content: center; gap: 8px; padding: 12px; overflow: visible; }
+  .tab {
+    flex: 0 0 auto;
+    min-width: 0;
+    font-size: 13px;
+    border: 1.5px solid rgba(255, 255, 255, .9);
+    border-radius: 999px;
+    padding: 8px 14px;
+  }
+  .tab:first-child { border-left: 1.5px solid rgba(255, 255, 255, .9); }
+  .tab::after { display: none; }
+  .tab.activo { background: var(--blanco); color: var(--naranja); }
+
+  /* Ficha: nombre, luego foto, luego el texto. display:contents deja que el titulo y
+     el texto se acomoden alrededor de la foto sin duplicar nada en el HTML. */
+  .producto { display: flex; flex-direction: column; gap: 0; }
+  .producto-texto { display: contents; }
+  .producto h3 { order: 1; font-size: 28px; margin-bottom: 14px; }
+  .producto-media { order: 2; max-width: 520px; width: 100%; margin-bottom: 18px; }
+  .producto-media img { max-height: 340px; }
+  .producto-texto > :not(h3) { order: 3; }
+  .producto h4 { font-size: 21px; margin-top: 16px; }
+  .btn-cotizar { width: 100%; margin-top: 22px; }
 }
 
 @media (max-width: 720px) {
   .wrap { padding: 0 16px; }
-  .hero { padding: 32px 0; }
-  #deacero-lead-form { padding: 20px 16px; }
-  #deacero-lead-form .form-row { flex-direction: column; }
-  .tab { min-width: 0; flex: 0 0 auto; font-size: 13px; }
+  .topbar { padding: 10px 0; }
+  .topbar-logo img { width: 130px; }
+  .hero { padding: 24px 0 32px; }
+  .hero-grid { gap: 22px; }
+  .hero-copy h1 { margin-bottom: 10px; }
+  .hero-logo { display: none; } /* ya esta en el encabezado: en celular solo empuja el formulario */
+  .hero-copy p { font-size: 17px; }
+  .hero-bar { margin-top: 14px; height: 5px; width: 72px; }
+  .form-card { scroll-margin-top: 12px; }
+  #deacero-lead-form { padding: 20px 16px; gap: 12px; }
+  #deacero-lead-form .form-row { flex-direction: column; gap: 12px; }
+  /* Nombre y Apellidos caben lado a lado: el formulario queda mas corto */
+  #deacero-lead-form .form-row.par { flex-direction: row; }
+  .btn-enviar { align-self: stretch; }
+
   .segmento { grid-template-columns: 1fr; min-height: 0; }
-  .productos-menu { flex-direction: row; overflow-x: auto; scrollbar-width: none; }
-  .producto-link { flex: 0 0 auto; font-size: 13px; padding: 12px 14px; }
-  .producto { padding: 24px 16px 40px; }
+  /* Productos en chips que se acomodan en varias filas: se ven todos sin adivinar
+     que hay mas a la derecha. */
+  .productos-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: #ececec;
+    border-top-width: 4px;
+  }
+  .producto-link {
+    flex: 0 0 auto;
+    min-height: 44px;
+    font-size: 13px;
+    padding: 8px 14px;
+    color: #4a5160;
+    background: var(--blanco);
+    border: 1.5px solid #c9ccd2;
+    border-radius: 999px;
+  }
+  .producto-link[aria-pressed="true"] { color: var(--blanco); background: var(--azul); border-color: var(--azul); box-shadow: none; }
+
+  .producto { padding: 22px 16px 36px; }
+  .producto-media { max-width: none; }
+  .footer { padding: 40px 0; }
   .footer-grid { flex-direction: column; align-items: flex-start; }
+  .footer-grid > img { width: 180px; }
+  .redes p { font-size: 19px; }
+  .redes ul { gap: 8px; }
+  .redes a { width: 44px; height: 44px; } /* 44px es el minimo para el dedo; los 6 caben en una fila desde 360px */
+  .redes svg { width: 22px; height: 22px; }
+}
+
+/* Celulares angostos: pestanas y productos en 2 columnas para que no ocupen
+   media pantalla en filas sueltas. El texto largo baja a 2 renglones. */
+@media (max-width: 480px) {
+  .tabs, .productos-menu { display: grid; grid-template-columns: 1fr 1fr; }
+  .tab, .producto-link { white-space: normal; line-height: 1.15; padding: 6px 10px; font-size: 12.5px; }
+  /* Si sobra una opcion en la ultima fila, va centrada a todo lo ancho. */
+  .tab:last-child:nth-child(odd), .producto-link:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; min-width: 50%; }
 }
