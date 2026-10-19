@@ -20,9 +20,12 @@
  * PI2_Producto_de_interes__c Varilla Grado 42, Malla Triple Nudo y Malla Nudo Fijo;
  * Unidad_De_Venta__c Kg. Antes de agregar un producto o proyecto aqui, el valor
  * debe existir en PROD: si no, Web-to-Lead descarta el prospecto sin avisar.
- * SubProducto__c es abierto: acepta cualquier valor.
- * SPG_Segmento__c tiene "Vialidades" y "Energía" por separado, no
- * "Vialidades y Energía": por eso ese segmento va vacio hasta que se decida.
+ * subproducto y segmento deben ser IGUALES (texto exacto) a los valores de los criterios
+ * de las reglas SPG (Rule_Criterion__c de SubProducto__c y SPG_Segmento__c); si no, ninguna
+ * regla aplica y el prospecto se queda con Admin Ext. SubProducto__c es abierto y acepta
+ * cualquier valor, por eso el error no se nota al enviar (corregido 2026-10-19).
+ * "Vialidades y Energía" usa el segmento 'Vialidades': las reglas de Vialidades y de Energía
+ * son identicas y van al mismo ejecutivo.
  * ========================================================================== */
 var CATALOGO = {
   segmentos: [
@@ -36,7 +39,7 @@ var CATALOGO = {
       productos: ['armadura', 'malla-ciclonica', 'malla-ingenieria', 'malla-nudo-fijo', 'malla-triple-nudo', 'rejas', 'varilla-6000', 'varilla-g42', 'varilla-habilitada'] },
     { id: 'erosion',      nombre: 'Control de Erosión',   proyecto: 'Control de erosión',   segmento: 'Control de Erosión',
       productos: ['gavion'] },
-    { id: 'vialidades',   nombre: 'Vialidades y Energía', proyecto: 'Vialidades y Energía', segmento: '',
+    { id: 'vialidades',   nombre: 'Vialidades y Energía', proyecto: 'Vialidades y Energía', segmento: 'Vialidades',
       productos: ['fibras', 'malla-ingenieria', 'redondo-carretero', 'varilla-habilitada'] },
     { id: 'mineria',      nombre: 'Minería',              proyecto: 'Minería',              segmento: 'Minería',
       productos: ['fibras', 'malla-ingenieria', 'malla-minera', 'varilla-habilitada'] }
@@ -51,7 +54,7 @@ var CATALOGO = {
       ventajas: ['Disminuye el riesgo de fisuración.', 'Alarga la vida útil de la obra.', 'Asegura un refuerzo homogéneo y tridimensional en la matriz.', 'Mayor resistencia a la flexión y tracción cortante.', 'Mayor resistencia al impacto y a la fatiga.', 'Sustituye armados tradicionales, como mallas electrosoldadas.', 'Presentan menor deformación.']
     },
     'rejas': {
-      nombre: 'Rejas DEACERO®', interes: 'Reja DEACERO', subproducto: 'Reja DEACERO',
+      nombre: 'Rejas DEACERO®', interes: 'Reja DEACERO', subproducto: 'Rejas Deacero',
       descripcion: 'Desarrolladas con una tecnología que combina estética, funcionalidad y resistencia para entregar productos de calidad que brindan seguridad y confianza, con el mejor sistema de rejas disponible en México para un entorno sustentable.',
       caracteristicas: ['Sistema compuesto por paneles, postes, abrazaderas, grapas y accesorios especiales.', 'Colores en inventario: verde, blanco, negro, café y gris.', 'Colores bajo pedido: amarillo, rojo y azul.'],
       usos: [], ventajas: [],
@@ -72,7 +75,7 @@ var CATALOGO = {
       ventajas: ['Ahorro en costos de material y mano de obra.', 'Sin desperdicio: las hojas se fabrican de acuerdo con las dimensiones de cada proyecto.', 'Acelera hasta 4 veces el proceso constructivo por la rapidez de colocación (traslape).']
     },
     'varilla-habilitada': {
-      nombre: 'Varilla Habilitada', interes: 'Varilla Habilitada', subproducto: 'Habilitado de Varilla',
+      nombre: 'Varilla Habilitada', interes: 'Varilla Habilitada', subproducto: 'Varilla Habilitada',
       descripcion: 'Varilla corrugada habilitada mediante proceso industrializado para refuerzo de concreto.',
       caracteristicas: ['Varilla corrugada laminada en caliente de Grado 42 bajo la norma NMX-B-506-2019 Canacero, equivalente a Grado 60 ASTM A615-2022.', 'Cortada a la medida.', 'Suministrada en tramos rectos o doblada, con dobleces según ACI 318-19.', 'Cumple los requisitos de ganchos estándar, sísmicos y suplementarios del Reglamento ACI 318-19 y de las Normas Técnicas Complementarias de la CDMX 2017.'],
       usos: ['Refuerzo de concreto para zapatas, pilotes, pilas, pisos, columnas, trabes, losas, muros, castillos y cerramientos.', 'Prefabricados, túneles, pavimentos, puentes y canales.'],
@@ -100,7 +103,7 @@ var CATALOGO = {
       ventajas: ['Cuenta con Declaración Ambiental de Producto (EPD).', 'Versatilidad para ajustes en obra.', 'Disponibilidad de producto inmediata.']
     },
     'varilla-6000': {
-      nombre: 'Varilla 6000', interes: 'Varilla 6000', subproducto: 'Varilla Grado 60',
+      nombre: 'Varilla 6000', interes: 'Varilla 6000', subproducto: 'Varilla 6000',
       descripcion: 'Varilla corrugada DA 6000 para refuerzo de concreto.',
       caracteristicas: ['Varilla laminada y corrugada en frío para refuerzo de concreto.', 'Corrugado espina de pescado.', 'Acabado pulido.', 'Norma de fabricación: NMX-B-072-CANACERO-2017.'],
       usos: ['Anillos o estribos.', 'Dalas y castillos.', 'Losas sólidas y aligeradas.'],
@@ -114,7 +117,7 @@ var CATALOGO = {
       ventajas: ['Ahorro de hasta 85% en la cimbra total de losas.', 'Ahorro en mano de obra para habilitado de acero de refuerzo.', 'Ahorro en tiempo de ejecución de la losa.']
     },
     'malla-triple-nudo': {
-      nombre: 'Malla Triple Nudo', interes: 'Malla Triple Nudo', subproducto: 'Malla Triple Nudo Urbana',
+      nombre: 'Malla Triple Nudo', interes: 'Malla Triple Nudo', subproducto: 'Malla Triple Nudo',
       descripcion: 'Malla hecha con alambres galvanizados de mayor resistencia y durabilidad que cualquier otro cerco perimetral, con entorches en nudo triple y tensión independiente en cada alambre horizontal.',
       caracteristicas: ['Alambres de alta resistencia a la tensión.', 'Cuadros uniformes.', 'Curva de tensión que absorbe los impactos.', 'Recubrimiento galvanizado (100 h en cámara salina).'],
       usos: ['Bodegas.', 'Parques industriales.', 'Aeropuertos.', 'Instalaciones mayores a 100 m.'],
@@ -128,7 +131,7 @@ var CATALOGO = {
       ventajas: ['Ahorro en accesorios: permite 4.5 m entre postes en bajo carbono y 8.25 m en alta resistencia, frente a la malla ciclónica.', 'Delimitación casi imperceptible al instalarse.', 'Previene heridas en la piel al no tener filos en los extremos del nudo.', 'Bajo costo de mantenimiento por ruptura y oxidación.']
     },
     'malla-ciclonica': {
-      nombre: 'Malla Ciclónica', interes: 'Malla Ciclonica', subproducto: 'Ciclónica Galvanizada',
+      nombre: 'Malla Ciclónica', interes: 'Malla Ciclonica', subproducto: 'Malla Ciclonica',
       descripcion: 'Malla metálica galvanizada fabricada con alambre de acero de clase comercial, tejida helicoidalmente formando rombos.',
       caracteristicas: ['Tejido simétrico y continuo que garantiza aberturas reales.', 'Galvanizado por inmersión que garantiza un recubrimiento uniforme.', 'Norma de fabricación: ASTM A-392-11, A-641-14 y NMX-B-013-CANACERO-2016.'],
       usos: ['Residencial, parques y áreas de juego.', 'Escuelas y universidades.', 'Delimitación industrial.', 'Terrenos.'],
