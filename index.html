@@ -151,12 +151,14 @@
     </div>
     <div class="form-field">
       <!-- Unidad_De_Venta__c (restringido). "Kg" se agrego en PROD el 2026-10-16
-           (CSA-286, solo RT Prospectos_Mex). Un valor que no exista en el picklist
+           (CSA-286) y "Metros Lineales" el 2026-10-19 (CSA-287), ambos en los RT
+           Prospectos_Mex y Alambres_Mexico. Un valor que no exista en el picklist
            hace que Web-to-Lead descarte el Lead SIN avisar. -->
       <label for="spg_unidad">Unidad de venta:</label>
       <select id="spg_unidad" name="00NRp000000cfTZ" required>
         <option value="">Selecciona una opción</option>
         <option value="Kg">Kg</option>
+        <option value="Metros Lineales">Metros lineales</option>
         <option value="Metros Cuadrados">Metros cuadrados</option>
         <option value="Metros Cubicos">Metros cúbicos</option>
         <option value="Toneladas">Toneladas</option>
